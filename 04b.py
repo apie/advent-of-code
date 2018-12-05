@@ -72,7 +72,7 @@ def test_most_asleep(example_input):
 
 
 if __name__ == '__main__':
-  with open('4.input', 'r') as in_list:
+  with open('04.input', 'r') as in_list:
     sd = get_guard_sleep_data(sorted(in_list.readlines()))
     sf = get_minute_sleep_frequencies(sd)
     print(sf)

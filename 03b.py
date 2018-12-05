@@ -46,6 +46,6 @@ def test_non_overlapping_squares(example_input):
 
 
 if __name__ == '__main__':
-  with open('3.input', 'r') as in_list:
+  with open('03.input', 'r') as in_list:
     print(non_overlapping_squares(in_list.readlines()))
 

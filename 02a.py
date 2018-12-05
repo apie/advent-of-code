@@ -5,7 +5,7 @@ from collections import Counter
 #Multiply those numbers
 
 two_count = three_count = 0
-with open('2.input', 'r') as in_list:
+with open('02.input', 'r') as in_list:
   in_list_lines = in_list.readlines()
 for l in in_list_lines:
   counter = Counter(l)

@@ -10,7 +10,7 @@ def hamming(s1, s2):
 
 the_two_lines = []
 
-with open('2.input', 'r') as in_list:
+with open('02.input', 'r') as in_list:
   in_list_lines = in_list.readlines()
 for l in in_list_lines:
   #print(l)

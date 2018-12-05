@@ -70,7 +70,7 @@ def test_most_asleep(example_input):
 
 
 if __name__ == '__main__':
-  with open('4.input', 'r') as in_list:
+  with open('04.input', 'r') as in_list:
     ma = get_guard_most_asleep(sorted(in_list.readlines()))
     print(ma[0])
     minute = get_minute_most_asleep(ma[1]['time_stamps'])

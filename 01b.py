@@ -4,7 +4,7 @@ from itertools import cycle
 total = 0
 reached = {}
 reached[total] = 1
-with open('1.input', 'r') as in_list:
+with open('01.input', 'r') as in_list:
   in_list_lines = in_list.readlines()
   for l in cycle(in_list_lines):
     #print(l)
