@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+#10,68 seconds if using the original string as input
+# 1,30 seconds if using the reduced string as input
 import pytest
 import string
 from operator import itemgetter
@@ -37,6 +39,6 @@ def test_find_smallest(example_input):
 
 if __name__ == '__main__':
   with open('05.input', 'r') as in_list:
-    print(find_smallest(in_list.readline().strip()))
+    print(find_smallest(reduce_str(in_list.readline().strip())))
 
 
