@@ -31,6 +31,6 @@ def test_reduce_str(example_input):
 
 if __name__ == '__main__':
   with open('05.input', 'r') as in_list:
-    print(len(reduce_str(in_list.readline())))
+    print(len(reduce_str(in_list.readline().strip())))
 
 
