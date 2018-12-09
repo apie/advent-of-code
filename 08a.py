@@ -10,27 +10,21 @@ def prep_input(in_lines):
   return prepped_input
   
 def parse_nodes(in_list, nodes=None, nr_iter=None):
-  print('looping: ',nr_iter)
   if not nodes:
     nodes = []
   i = 0
   while True:
-    print('iteration ',i)
     try:
       nr_childs = next(in_list)
     except StopIteration:
       return nodes 
-    print('Nr_childs: ',nr_childs)
     nr_metadata = next(in_list)
-    print('Nr_metadata: ',nr_metadata)
     childs = []
     if nr_childs > 0:
       childs = parse_nodes(in_list, nr_iter=nr_childs)
-    print('Childs: ',childs)
     metadata = []
     for nm in range(nr_metadata):
       metadata.append(next(in_list))
-    print('Metadata: ',metadata)
     nodes.append(dict(
       childs=childs,
       meta=metadata
