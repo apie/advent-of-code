@@ -45,17 +45,8 @@ def sum_meta(nodes, meta_total=0):
 
 def nodevalue(node):
   if len(node['childs']):
-    val = 0
-    print('has childs', end=' ')
-    print(node['meta'], end=' ')
-    for m in node['meta']:
-      print('meta: ', m, end= ' ')
-      try:
-        val += nodevalue(node['childs'][m-1])
-      except IndexError:
-        pass
-      print('VAL: ',val)
-    return val
+    return sum(nodevalue(node['childs'][m-1])
+      for m in node['meta'] if m <= len(node['childs']))
   else:
     return sum(m for m in node['meta'])
 
@@ -97,8 +88,6 @@ if __name__ == '__main__':
   with open('08.input', 'r') as in_file:
     prepped_input = prep_input(in_file.readlines())
   nodes = parse_nodes(iter(prepped_input))
-  import pprint
-  pprint.pprint(nodes, depth=100)
   print('Answer: ',nodevalue(nodes[0]))
 
 
