@@ -28,6 +28,11 @@ class Grid():
     self.points = []
   def add_point(self, p):
     self.points.append(p)
+    self.calc_extremes(p)
+    self._set_point(p)
+  def reset_extremes(self):
+    self.max_x = self.min_x = self.max_y = self.min_y = 0
+  def calc_extremes(self, p):
     if p.x > self.max_x:
       self.max_x = p.x
     if p.x < self.min_x:
@@ -36,7 +41,6 @@ class Grid():
       self.max_y = p.y
     if p.y < self.min_y:
       self.min_y = p.y
-    self._set_point(p)
   def _set_point(self, p):
     self.g[p.x][p.y] = '#'
   def _clear_point(self, p):
@@ -53,11 +57,15 @@ class Grid():
           print('.', end='')
       print('')
     print('')
-  def step_points(self):
+  def step_points(self, crop=False):
+    if crop:
+      self.reset_extremes()
     for p in self.points:
       self._clear_point(p)
       p.step()
       self._set_point(p)
+      if crop:
+        self.calc_extremes(p)
   def get_constellation(self):
     const = []
     for y in range(self.min_y, self.max_y+1):
@@ -242,6 +250,8 @@ def test_answer(example_input):
 if __name__ == '__main__':
   with open('10.input', 'r') as in_file:
     g = answer(in_file.readlines())
+  g.print_grid()
+  g.step_points(True)
   g.print_grid()
   #TODO kleinste bounding box dat moet iets zijn.
 
