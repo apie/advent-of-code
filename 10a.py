@@ -17,14 +17,13 @@ class Point():
     self.y += self.ay*step
   def get_pos(self):
     return (self.x, self.y)
+  def get_a(self):
+    return (self.ax, self.ay)
 
 class Grid():
   def __init__(self):
     self.g = defaultdict(dict)
-    self.max_x = 0
-    self.max_y = 0
-    self.min_x = 0
-    self.min_y = 0
+    self.max_x = self.max_y = self.min_x = self.min_y = 0
     self.points = []
   def add_point(self, p):
     self.points.append(p)
@@ -33,14 +32,10 @@ class Grid():
   def reset_extremes(self):
     self.max_x = self.min_x = self.max_y = self.min_y = 0
   def calc_extremes(self, p):
-    if p.x > self.max_x:
-      self.max_x = p.x
-    if p.x < self.min_x:
-      self.min_x = p.x
-    if p.y > self.max_y:
-      self.max_y = p.y
-    if p.y < self.min_y:
-      self.min_y = p.y
+    self.max_x = max(self.max_x, p.x)
+    self.min_x = min(self.min_x, p.x)
+    self.max_y = max(self.max_y, p.y)
+    self.min_y = min(self.min_y, p.y)
   def _set_point(self, p):
     self.g[p.x][p.y] = '#'
   def _clear_point(self, p):
@@ -48,15 +43,6 @@ class Grid():
       del self.g[p.x][p.y]
     except KeyError:
       pass
-  def print_grid(self):
-    for y in range(self.min_y, self.max_y+1):
-      for x in range(self.min_x, self.max_x+1):
-        try:
-          print(self.g[x][y], end='')
-        except KeyError:
-          print('.', end='')
-      print('')
-    print('')
   def step_points(self, steps=1, crop=False):
     if crop:
       self.reset_extremes()
@@ -66,7 +52,7 @@ class Grid():
       self._set_point(p)
       if crop:
         self.calc_extremes(p)
-  def get_constellation(self):
+  def get_constellation(self, axis=False):
     const = []
     for y in range(self.min_y, self.max_y+1):
       cx = []
@@ -74,7 +60,14 @@ class Grid():
         try:
           cx.append(self.g[x][y])
         except KeyError:
-          cx.append('.')
+          if axis and x==0 and y==0:
+            cx.append('+')
+          elif axis and x==0:
+            cx.append('|')
+          elif axis and y==0:
+            cx.append('-')
+          else:
+            cx.append('.')
       const.append(''.join(cx))
     return '\n'.join(const)
   def max_drawing(self):
@@ -141,9 +134,15 @@ def test_answer(example_input):
   grid_size = (g.min_x, g.max_x, g.min_y, g.max_y)
   assert grid_size == (-6, 15, -4, 11)
   print('Grid size: ', grid_size)
-  g.print_grid()
+  c = g.get_constellation()
+  print(g.get_constellation(True))
+  print()
   # t0
-  assert g.get_constellation() == '''
+  coords = [(p.get_pos(), p.get_a()) for p in g.points]
+  coords.sort()
+  print(coords)
+  print(len(coords))
+  assert c == '''
 ........#.............
 ................#.....
 .........#.#..#.......
@@ -162,9 +161,15 @@ def test_answer(example_input):
 ...#.......#..........
 '''.strip()
   g.step_points()
-  g.print_grid()
+  c = g.get_constellation()
+  print(g.get_constellation(True))
+  print()
   # t1
-  assert g.get_constellation() == '''
+  coords = [(p.get_pos(), p.get_a()) for p in g.points]
+  coords.sort()
+  print(coords)
+  print(len(coords))
+  assert c == '''
 ......................
 ......................
 ..........#....#......
@@ -183,9 +188,15 @@ def test_answer(example_input):
 ......................
 '''.strip()
   g.step_points()
-  g.print_grid()
+  c = g.get_constellation()
+  print(g.get_constellation(True))
+  print()
   # t2
-  assert g.get_constellation() == '''
+  coords = [(p.get_pos(), p.get_a()) for p in g.points]
+  coords.sort()
+  print(coords)
+  print(len(coords))
+  assert c == '''
 ......................
 ......................
 ......................
@@ -204,9 +215,15 @@ def test_answer(example_input):
 ......................
 '''.strip()
   g.step_points()
-  g.print_grid()
+  c = g.get_constellation()
+  print(g.get_constellation(True))
+  print()
   # t3
-  assert g.get_constellation() == '''
+  coords = [(p.get_pos(), p.get_a()) for p in g.points]
+  coords.sort()
+  print(coords)
+  print(len(coords))
+  assert c == '''
 ......................
 ......................
 ......................
@@ -225,9 +242,15 @@ def test_answer(example_input):
 ......................
 '''.strip()
   g.step_points()
-  g.print_grid()
+  c = g.get_constellation()
+  print(g.get_constellation(True))
+  print()
   # t4
-  assert g.get_constellation() == '''
+  coords = [(p.get_pos(), p.get_a()) for p in g.points]
+  coords.sort()
+  print(coords)
+  print(len(coords))
+  assert c == '''
 ......................
 ......................
 ......................
