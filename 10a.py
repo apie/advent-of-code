@@ -13,8 +13,8 @@ class Point():
     self.time=0
   def step(self, step=1):
     self.time += step 
-    self.x += self.ax
-    self.y += self.ay
+    self.x += self.ax*step
+    self.y += self.ay*step
   def get_pos(self):
     return (self.x, self.y)
 
@@ -57,12 +57,12 @@ class Grid():
           print('.', end='')
       print('')
     print('')
-  def step_points(self, crop=False):
+  def step_points(self, steps=1, crop=False):
     if crop:
       self.reset_extremes()
     for p in self.points:
       self._clear_point(p)
-      p.step()
+      p.step(steps)
       self._set_point(p)
       if crop:
         self.calc_extremes(p)
@@ -251,7 +251,7 @@ if __name__ == '__main__':
   with open('10.input', 'r') as in_file:
     g = answer(in_file.readlines())
   g.print_grid()
-  g.step_points(True)
+  g.step_points(crop=True)
   g.print_grid()
   #TODO kleinste bounding box dat moet iets zijn.
 
