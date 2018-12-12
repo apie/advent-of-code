@@ -24,16 +24,12 @@ class Plants():
         '#' if p+1 in self.pots else '.',
         '#' if p+2 in self.pots else '.',
       )
-      print('Trying '+key+' at pos: ',p)
       if key in self.rules:
-        print(key+' matched at pos: ',p)
         pots_new[p] = '#'
         pots_new_str = ''.join(['#' if i in pots_new else '.'
           for i in range(min(pots_new.keys()), max(pots_new.keys())+1)])
-        print('Pots new is now: '+pots_new_str)
     self.pots = pots_new
     self.generation += 1
-    print('Pots after {} generations: {}'.format(self.generation, self.pots))
 
   def print_pots(self):
     return ''.join(['#' if i in self.pots else '.'
@@ -55,16 +51,12 @@ def example_input():
 
 def test_answer(example_input, example_result):
   plants = Plants(example_input)
-  print('Initial state: ',plants.pots)
   print('Rules: ',plants.rules)
-  print(len(plants.rules))
-  print(plants.print_pots())
-  print(example_result[2])
+  print('Pots after {} generations: {}'.format(plants.generation, plants.print_pots()))
   assert '0: '+plants.print_pots() == example_result[2].strip()
   for i in range(1, 20+1):
     plants.gen()
-    print(i)
-    print(plants.print_pots())
+    print('Pots after {} generations: {}'.format(plants.generation, plants.print_pots()))
     assert '{:2}: {}'.format(i, plants.print_pots()) == example_result[2+i]
   assert plants.sum_pots() == 325
 
@@ -72,14 +64,9 @@ if __name__ == '__main__':
   with open('{:02}.input'.format(DAY), 'r') as in_file:
     in_lines = in_file.read().split('\n')
   plants = Plants(in_lines)
-  print('Initial state: ',plants.pots)
-  print('Rules: ',plants.rules)
-  print(len(plants.rules))
-  print(plants.print_pots())
-  print(in_lines[2])
+  print('Pots after {} generations: {}'.format(plants.generation, plants.print_pots()))
   for i in range(1, 20+1):
     plants.gen()
-    print(i)
-    print(plants.print_pots())
+    print('Pots after {} generations: {}'.format(plants.generation, plants.print_pots()))
   print('Answer: {}'.format(plants.sum_pots()))
 
