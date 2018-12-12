@@ -12,7 +12,7 @@ class Plants():
     }
     self.rules = {
       r.split('=>')[0].strip():r.split('=>')[1].strip()
-      for r in lines if r and r.split('=>')[1].strip() == '#'
+      for r in lines if r
     }
   def gen(self):
     pots_new = {}
@@ -33,7 +33,7 @@ class Plants():
         print('Pots new is now: '+pots_new_str)
     self.pots = pots_new
     self.generation += 1
-    print('Pots after {} generations: {}'.format(self.generation, pots_new_str))
+    print('Pots after {} generations: {}'.format(self.generation, self.pots))
 
   def print_pots(self):
     return ''.join(['#' if i in self.pots else '.'
