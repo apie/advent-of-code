@@ -12,7 +12,7 @@ class Plants():
     }
     self.rules = {
       r.split('=>')[0].strip():r.split('=>')[1].strip()
-      for r in lines if r
+      for r in lines if r and r.split('=>')[1].strip() == '#'
     }
   def gen(self):
     pots_new = {}
@@ -70,7 +70,7 @@ def test_answer(example_input, example_result):
 
 if __name__ == '__main__':
   with open('{:02}.input'.format(DAY), 'r') as in_file:
-    in_lines = in_file.readlines()
+    in_lines = in_file.read().split('\n')
   plants = Plants(in_lines)
   print('Initial state: ',plants.pots)
   print('Rules: ',plants.rules)
