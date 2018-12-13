@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import pytest
+from itertools import cycle
+
 DAY='13'
 VERT='|'
 HORIZ='-'
@@ -12,7 +14,10 @@ CARTDOWN='v'
 CARTLEFT='<'
 CARTRIGHT='>'
 CARTS =(CARTUP, CARTDOWN, CARTLEFT, CARTRIGHT)
-CARTSEQUENCE='LSR'
+CARTSL='L'
+CARTSS='S'
+CARTSR='R'
+CARTSEQUENCE=(CARTSL, CARTSS, CARTSR)
 COLLISION='X'
 
 class Cart():
@@ -21,7 +26,7 @@ class Cart():
     self.track = VERT if c in [CARTUP, CARTDOWN] else HORIZ
     self.x = x
     self.y = y
-    self.turns = iter(CARTSEQUENCE)
+    self.turns = cycle(CARTSEQUENCE)
   def move(self):
     if self.c == CARTUP:
       self.y -= 1
@@ -34,9 +39,27 @@ class Cart():
   def get_pos(self):
     return (self.x, self.y)
   def turn(self):
-    next(self.turns)
-    print(self.turns)
-    #TODO
+    n_turn = next(self.turns)
+    if self.c == CARTUP:
+      if n_turn == CARTSL:
+        self.c = CARTLEFT
+      elif n_turn == CARTSR:
+        self.c = CARTRIGHT
+    elif self.c == CARTDOWN:
+      if n_turn == CARTSL:
+        self.c = CARTRIGHT
+      elif n_turn == CARTSR:
+        self.c = CARTLEFT
+    elif self.c == CARTLEFT:
+      if n_turn == CARTSL:
+        self.c = CARTDOWN
+      elif n_turn == CARTSR:
+        self.c = CARTUP
+    elif self.c == CARTRIGHT:
+      if n_turn == CARTSL:
+        self.c = CARTUP
+      elif n_turn == CARTSR:
+        self.c = CARTDOWN
  
 class Map():
   def __init__(self, in_lines):
@@ -102,7 +125,12 @@ def example_input_1():
   with open('{}.input.test.1'.format(DAY), 'r') as in_file:
     return in_file.read().split('\n')
 
-def test_answer(example_input_1):
+@pytest.fixture
+def example_input_2():
+  with open('{}.input.test.2'.format(DAY), 'r') as in_file:
+    return in_file.read().split('\n')
+
+def test_example_1(example_input_1):
   print()
   m = Map(example_input_1[:7])
   print(m.get_map())
@@ -115,11 +143,20 @@ def test_answer(example_input_1):
   print('TICK')
   print(m.get_map())
   assert m.map_l == example_input_1[2*16:2*16+7]
-  return
-  assert m==1
-  while True:
-    m.tick()
-  assert m==1
+
+def test_example_2(example_input_2):
+  print()
+  m = Map(example_input_2[:6])
+  print(m.get_map())
+  m.tick()
+  print('TICK')
+  print(m.get_map())
+  # Skip intermediate results in the example_input_1
+  assert m.map_l == example_input_2[1*7:1*7+6]
+  m.tick()
+  print('TICK')
+  print(m.get_map())
+  assert m.map_l == example_input_2[2*7:2*7+6]
 
 if __name__ == '__main__':
   with open('{}.input'.format(DAY), 'r') as in_file:
