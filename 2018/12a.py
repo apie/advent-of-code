@@ -55,7 +55,7 @@ def test_answer(example_input, example_result):
   for i in range(0, 20+1):
     if i > 0:
       plants.gen()
-    print('Pots after {} generations: {}'.format(plants.generation, plants.print_pots()))
+    print('Pots after {:2} generations: {}'.format(plants.generation, plants.print_pots()))
     assert '{:2}: {}'.format(i, plants.print_pots()) == example_result[2+i]
   assert plants.sum_pots() == 325
 
@@ -66,6 +66,6 @@ if __name__ == '__main__':
   for i in range(0, 20+1):
     if i > 0:
       plants.gen()
-    print('Pots after {} generations: {}'.format(plants.generation, plants.print_pots()))
+    print('Pots after {:2} generations: {}'.format(plants.generation, plants.print_pots()))
   print('Answer: {}'.format(plants.sum_pots()))
 
