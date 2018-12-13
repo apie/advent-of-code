@@ -18,7 +18,7 @@ CARTSL='L'
 CARTSS='S'
 CARTSR='R'
 CARTSEQUENCE=(CARTSL, CARTSS, CARTSR)
-COLLISION='X'
+CRASH='X'
 
 class Cart():
   def __init__(self, c, x, y):
@@ -67,30 +67,28 @@ class Map():
     self.carts = []
     for y, l in enumerate(self.map_l):
       for x, c in enumerate(l):
-        #print(x,c)
         if c in CARTS:
           self.carts.append(Cart(c, x, y))
 
-  def collision(self, new_pos):
-      a=list(self.map_l[new_pos[1]]);a[new_pos[0]]=COLLISION
+  def crash(self, new_pos):
+      a=list(self.map_l[new_pos[1]]);a[new_pos[0]]=CRASH
       self.map_l[new_pos[1]]=''.join(a);
 
   def tick(self):
     cart_positions = set()
     for cart in self.carts:
       old_pos = cart.get_pos()
-      print('Voor: ',cart.get_pos())
+      #print('Voor: ',cart.get_pos())
       cart.move()
-      print(self.map_l)
-      #import pdb;pdb.set_trace()
+      #print(self.map_l)
       a=list(self.map_l[old_pos[1]]);a[old_pos[0]]=cart.track;
       self.map_l[old_pos[1]]=''.join(a);
-      print(self.map_l)
+      #print(self.map_l)
 
       new_pos = cart.get_pos()
-      print('Na: ',new_pos)
+      #print('Na: ',new_pos)
       if new_pos in cart_positions:
-        return self.collision(new_pos)
+        return self.crash(new_pos)
       cart_positions.add(new_pos)
       new_track_char = self.map_l[new_pos[1]][new_pos[0]]
       cart.track = new_track_char
@@ -116,9 +114,16 @@ class Map():
         cart.turn()
       a=list(self.map_l[new_pos[1]]);a[new_pos[0]]=cart.c
       self.map_l[new_pos[1]]=''.join(a);
-      print(self.map_l)
+      #print(self.map_l)
+
   def get_map(self):
     return '\n'.join(self.map_l)
+
+  def get_crash_location(self):
+    for y, l in enumerate(self.map_l):
+      for x, c in enumerate(l):
+        if c == CRASH:
+          return (x, y)
 
 @pytest.fixture
 def example_input_1():
@@ -148,18 +153,25 @@ def test_example_2(example_input_2):
   print()
   m = Map(example_input_2[:6])
   print(m.get_map())
-  m.tick()
-  print('TICK')
-  print(m.get_map())
-  # Skip intermediate results in the example_input_1
-  assert m.map_l == example_input_2[1*7:1*7+6]
-  m.tick()
-  print('TICK')
-  print(m.get_map())
-  assert m.map_l == example_input_2[2*7:2*7+6]
+  for i in range(1, 15):
+    m.tick()
+    print('TICK')
+    print(m.get_map())
+    assert m.map_l == example_input_2[i*7:i*7+6]
+  assert m.get_crash_location() == (7,3)
 
 if __name__ == '__main__':
   with open('{}.input'.format(DAY), 'r') as in_file:
-    print(answer(in_file.readlines()))
+    in_lines = in_file.read().split('\n')
+  print()
+  m = Map(in_lines)
+  print(m.get_map())
+  i = 0
+  while not m.get_crash_location():
+    i += 1
+    m.tick()
+    print('TICK {:3}'.format(i))
+    #print(m.get_map())
+  print(m.get_crash_location())
 
 
