@@ -6,13 +6,12 @@ def gen_recipes(elf1, elf2, in_str):
   in_recipes = [int(s) for s in in_str]
   recipes = in_recipes
 
-  new_recipe_number = in_recipes[elf1] + in_recipes[elf2]
+  new_recipe_number = int(recipes[elf1]) + int(recipes[elf2])
   if new_recipe_number < 10:
     new_recipes_l = [new_recipe_number]
   else:
     new_recipes_l = [new_recipe_number // 10, new_recipe_number % 10] # Split into the first 10 base digit and second.
-  recipes += new_recipes_l
-  return ''.join(str(r) for r in recipes)
+  return in_str+''.join(str(r) for r in new_recipes_l)
 
 def move_elves(recipes, elf1, elf2):
   if elf1 == elf2:
