@@ -11,9 +11,6 @@ def gen_recipes(elf1, elf2, in_str):
   return in_str+''.join(str(r) for r in new_recipes_l)
 
 def move_elves(recipes, elf1, elf2):
-  if elf1 == elf2:
-    import pdb;pdb.set_trace()
-    # ze komen op dezelfde positie terecht. wat te doen!? FIXME
   steps1 = 1 + int(recipes[elf1])
   steps2 = 1 + int(recipes[elf2])
   return ((elf1+steps1) % len(recipes), (elf2+steps2) % len(recipes))
@@ -21,7 +18,9 @@ def move_elves(recipes, elf1, elf2):
 def print_recipes_elves(recipes, elf1, elf2):
   retval = ''
   for i, c in enumerate(recipes):
-    if i == elf1:
+    if i == elf1 == elf2:
+      retval += '<{}>'.format(c)
+    elif i == elf1:
       retval += '({})'.format(c)
     elif i == elf2:
       retval += '[{}]'.format(c)
@@ -49,7 +48,7 @@ def next_ten(recipes, nr_recipes, steps=0):
   while len(state) < (nr_recipes+10):
     print('Steps: {}'.format(steps))
     print(len(state))
-    state = get_state(recipes, steps).replace(' ', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '')
+    state = get_state(recipes, steps).replace(' ', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('<', '').replace('>', '')
     steps += 1
   print('State: {}'.format(state))
 
@@ -88,9 +87,46 @@ def test_next_ten(example_input):
   assert next_ten(example_input, 5) == '0124515891'
   assert next_ten(example_input, 9) == '5158916779'
   assert next_ten(example_input, 18) == '9251071085'
-  assert next_ten(example_input, 2018, 1516) == '5941429882'
+  #assert next_ten(example_input, 2018, 1516) == '5941429882'
+  #assert next_ten('990941', 6) == '3841138812'
+
+def increase_recipes(elf1, elf2, recipes):
+  #print(print_recipes_elves(recipes, elf1, elf2))
+  recipes = gen_recipes(elf1, elf2, recipes)
+  elf1, elf2 = move_elves(recipes, elf1, elf2)
+  return (recipes, elf1, elf2)
+
+def test_answer(example_input):
+  assert answer(example_input, '37101') == '0124515891'
+
+def answer(recipes, puzzle_input):
+  """We need to find if our input is in the list of recipes. If it is, we need to find the 10 numbers after it."""
+  elf1 = 0
+  elf2 = 1
+  i = 0
+  while puzzle_input not in recipes[-10:]:
+    if i % 1000 == 0:
+      print(i)
+    #recipes_str = print_recipes_elves(recipes, elf1, elf2)
+    #print(recipes_str)
+    #print(recipes)
+    #print(puzzle_input)
+    recipes, elf1, elf2 = increase_recipes(elf1, elf2, recipes)
+
+    i += 1
+    #if i == 5:
+    #  break
+  print('Recipe found')
+  len_recipes = len(recipes)
+  while len(recipes) < len_recipes+10:
+    print(i)
+    recipes, elf1, elf2 = increase_recipes(elf1, elf2, recipes)
+    i += 1
+  print(recipes)
+  return recipes.split(puzzle_input)[1][:10]
 
 if __name__ == '__main__':
+  initial_recipes = example_input()
   puzzle_input = '990941'
-  print('Answer: {}'.format(next_ten(puzzle_input, len(puzzle_input))))
+  print('Answer: {}'.format(answer(initial_recipes, puzzle_input)))
 
