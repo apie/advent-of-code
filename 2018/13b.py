@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import pytest
 from itertools import cycle
+from operator import attrgetter
 
 DAY='13'
 VERT='|'
@@ -78,7 +79,7 @@ class Map():
   def tick(self):
     cart_positions = set()
     cart_positions_tracks = dict()
-    for cart in self.carts:
+    for cart in sorted(self.carts, key=attrgetter('x', 'y')):
       old_pos = cart.get_pos()
       #print('Voor: ',cart.get_pos())
       cart.move()
@@ -163,7 +164,7 @@ def test_example_3(example_input_3):
   for i in range(1, 4):
     print('TICK')
     m.tick()
-    print([c.get_pos() for c in m.carts])
+    print([c.get_pos() for c in sorted(m.carts, key=attrgetter('x', 'y'))])
     print('Crash at: ', m.get_crash_location())
     m.remove_crashed_carts()
     print(m.get_map())
