@@ -140,44 +140,9 @@ class Map():
         self.carts.remove(c)
 
 @pytest.fixture
-def example_input_1():
-  with open('{}.input.test.1'.format(DAY), 'r') as in_file:
-    return in_file.read().split('\n')
-
-@pytest.fixture
-def example_input_2():
-  with open('{}.input.test.2'.format(DAY), 'r') as in_file:
-    return in_file.read().split('\n')
-
-@pytest.fixture
 def example_input_3():
   with open('{}.input.test.3'.format(DAY), 'r') as in_file:
     return in_file.read().split('\n')
-
-def test_example_1(example_input_1):
-  print()
-  m = Map(example_input_1[:7])
-  print(m.get_map())
-  m.tick()
-  print('TICK')
-  print(m.get_map())
-  # Skip intermediate results in the example_input_1
-  assert m.map_l == example_input_1[1*16:1*16+7]
-  m.tick()
-  print('TICK')
-  print(m.get_map())
-  assert m.map_l == example_input_1[2*16:2*16+7]
-
-def test_example_2(example_input_2):
-  print()
-  m = Map(example_input_2[:6])
-  print(m.get_map())
-  for i in range(1, 15):
-    m.tick()
-    print('TICK')
-    print(m.get_map())
-    assert m.map_l == example_input_2[i*7:i*7+6]
-  assert m.get_crash_location() == (7,3)
 
 def test_example_3(example_input_3):
   print()
@@ -201,11 +166,11 @@ if __name__ == '__main__':
   m = Map(in_lines)
   print(m.get_map())
   i = 0
-  while not m.get_crash_location():
+  while not len(m.carts) == 1:
     i += 1
     m.tick()
     print('TICK {:3}'.format(i))
     #print(m.get_map())
-  print(m.get_crash_location())
+  print(m.carts[0].get_pos())
 
 
