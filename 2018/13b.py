@@ -65,6 +65,7 @@ class Map():
   def __init__(self, in_lines):
     self.map_l = in_lines
     self.carts = []
+    self.locations = []
     for y, l in enumerate(self.map_l):
       for x, c in enumerate(l):
         if c in CARTS:
@@ -88,12 +89,6 @@ class Map():
 
       new_pos = cart.get_pos()
       #print('Na: ',new_pos)
-      if new_pos in cart_positions:
-        cart.c = CRASH
-        cart.track = cart_positions_tracks[new_pos]
-        self.crash(new_pos)
-        continue
-      cart_positions.add(new_pos)
       new_track_char = self.map_l[new_pos[1]][new_pos[0]]
       cart.track = new_track_char
       cart_positions_tracks[new_pos] = cart.track
@@ -119,25 +114,41 @@ class Map():
         cart.turn()
       a=list(self.map_l[new_pos[1]]);a[new_pos[0]]=cart.c
       self.map_l[new_pos[1]]=''.join(a);
+      if new_pos in cart_positions:
+        cart.c = CRASH
+        cart.track = cart_positions_tracks[new_pos]
+        self.crash(new_pos)
+        continue
+      cart_positions.add(new_pos)
       #print(self.map_l)
 
   def get_map(self):
     return '\n'.join(self.map_l)
 
   def get_crash_location(self):
+    self.locations.clear()
     for y, l in enumerate(self.map_l):
       for x, c in enumerate(l):
         if c == CRASH:
-          return (x, y)
+          self.locations.append((x, y))
+    if len(self.locations) == 1:
+      return self.locations[0]
+    return self.locations
 
   def remove_crashed_carts(self):
-    for c in self.carts:
-      if c.c == CRASH:
-        new_pos = c.get_pos()
-        #import pdb;pdb.set_trace()
-        a=list(self.map_l[new_pos[1]]);a[new_pos[0]]=c.track
-        self.map_l[new_pos[1]]=''.join(a);
-        self.carts.remove(c)
+    to_remove = []
+    for cl in self.locations:
+      for c in self.carts:
+        if c.get_pos() == cl:
+          pos = c.get_pos()
+          print('Removing: ', pos)
+          #import pdb;pdb.set_trace()
+          if c.track not in CARTS:
+            a=list(self.map_l[pos[1]]);a[pos[0]]=c.track
+            self.map_l[pos[1]]=''.join(a);
+          to_remove.append(c)
+    for c in to_remove:
+      self.carts.remove(c)
 
 @pytest.fixture
 def example_input_3():
@@ -148,13 +159,16 @@ def test_example_3(example_input_3):
   print()
   m = Map(example_input_3[:7])
   print(m.get_map())
+  print('Nr of carts: ',len(m.carts))
   for i in range(1, 4):
+    print('TICK')
     m.tick()
+    print([c.get_pos() for c in m.carts])
     print('Crash at: ', m.get_crash_location())
     m.remove_crashed_carts()
-    m.remove_crashed_carts()
-    print('TICK')
     print(m.get_map())
+    print('Nr of carts: ',len(m.carts))
+    print([c.get_pos() for c in m.carts])
     assert m.map_l == example_input_3[i*8:i*8+7]
   assert len(m.carts) == 1
   assert m.carts[0].get_pos() == (6,4)
@@ -169,7 +183,8 @@ if __name__ == '__main__':
   while not len(m.carts) == 1:
     i += 1
     m.tick()
-    print('TICK {:3}'.format(i))
+    m.remove_crashed_carts()
+    print('TICK {:3}, CARTS: {}'.format(i, len(m.carts)))
     #print(m.get_map())
   print(m.carts[0].get_pos())
 
