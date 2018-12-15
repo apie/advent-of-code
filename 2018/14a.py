@@ -2,7 +2,7 @@
 import pytest
 DAY='14'
 
-def gen_recipes(elf1, elf2, in_str, rounds):
+def gen_recipes(elf1, elf2, in_str):
   in_recipes = [int(s) for s in in_str]
   recipes = in_recipes
 
@@ -15,11 +15,12 @@ def gen_recipes(elf1, elf2, in_str, rounds):
   return ''.join(str(r) for r in recipes)
 
 def move_elves(recipes, elf1, elf2):
+  if elf1 == elf2:
+    import pdb;pdb.set_trace()
+    # ze komen op dezelfde positie terecht. wat te doen!? FIXME
   steps1 = 1 + int(recipes[elf1])
-  steps1 %= len(recipes)
-  steps2 = 1 + int(recipes[elf1])
-  steps2 %= len(recipes)
-  return (elf1+steps1, elf2+steps2)
+  steps2 = 1 + int(recipes[elf2])
+  return ((elf1+steps1) % len(recipes), (elf2+steps2) % len(recipes))
 
 def print_recipes_elves(recipes, elf1, elf2):
   retval = ''
@@ -29,14 +30,34 @@ def print_recipes_elves(recipes, elf1, elf2):
     elif i == elf2:
       retval += '[{}]'.format(c)
     else:
-      #if retval.endswith(']') or retval.endswith(')'):
-      #  retval += ' '
       retval += ' {} '.format(c)
   return retval
     
 
-def next_ten():
-  pass
+def get_state(recipes, steps):
+  elf1 = 0
+  elf2 = 1
+  recipes_str = print_recipes_elves(recipes, elf1, elf2)
+  #print(recipes_str)
+  for i in range(1, steps+1):
+    recipes = gen_recipes(elf1, elf2, recipes)
+    elf1, elf2 = move_elves(recipes, elf1, elf2)
+    recipes_str = print_recipes_elves(recipes, elf1, elf2)
+    print(recipes_str)
+  print(recipes_str)
+  return recipes_str
+
+def next_ten(recipes, nr_recipes, steps=0):
+  'get scores of the ten recipes after nr_recipes have been completed'
+  state = ''
+  while len(state) < (nr_recipes+10):
+    print('Steps: {}'.format(steps))
+    print(len(state))
+    state = get_state(recipes, steps).replace(' ', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '')
+    steps += 1
+  print('State: {}'.format(state))
+
+  return state[nr_recipes:nr_recipes+10]
 
 @pytest.fixture
 def example_input():
@@ -47,23 +68,33 @@ def testresult():
   with open('{}.testresult'.format(DAY), 'r') as in_file:
     return in_file.read().split('\n')
 
-def test_answer(example_input, testresult):
+def test_first_runs(example_input, testresult):
   print('')
   elf1 = 0
   elf2 = 1
   initial_state = print_recipes_elves(example_input, elf1, elf2)
   print(initial_state)
   assert initial_state == testresult[0]
-  recipes = gen_recipes(elf1, elf2, example_input, 1)
+  recipes = gen_recipes(elf1, elf2, example_input)
   assert recipes == '3710'
   assert move_elves(recipes, elf1, elf2) == (0,1)
   state_1 = print_recipes_elves(recipes, elf1, elf2)
   print(state_1)
   assert state_1 == testresult[1]
+
+def test_get_state(example_input, testresult):
+  for i, l in enumerate(testresult):
+    if not l:
+      break
+    assert get_state(example_input, i) == l
+
+def test_next_ten(example_input):
   assert next_ten(example_input, 5) == '0124515891'
+  assert next_ten(example_input, 9) == '5158916779'
+  assert next_ten(example_input, 18) == '9251071085'
+  assert next_ten(example_input, 2018, 1516) == '5941429882'
 
 if __name__ == '__main__':
-  with open('{}.input'.format(DAY), 'r') as in_file:
-    print(answer(in_file.readlines()))
-
+  puzzle_input = '990941'
+  print('Answer: {}'.format(next_ten(puzzle_input, len(puzzle_input))))
 
