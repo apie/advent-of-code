@@ -3,10 +3,7 @@ import pytest
 DAY='14'
 
 def gen_recipes(elf1, elf2, in_str):
-  in_recipes = [int(s) for s in in_str]
-  recipes = in_recipes
-
-  new_recipe_number = int(recipes[elf1]) + int(recipes[elf2])
+  new_recipe_number = int(in_str[elf1]) + int(in_str[elf2])
   if new_recipe_number < 10:
     new_recipes_l = [new_recipe_number]
   else:
