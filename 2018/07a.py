@@ -1,25 +1,14 @@
 #!/usr/bin/env python3
 import pytest
 import re
+from collections import defaultdict
+from itertools import chain
 DAY='07'
 
-class Tree():
-  def __init__(self, data):
-    self.left = None
-    self.right = None
-    self.data = data
-  def __str__(self):
-    return '{} ({}, {})'.format(self.data, self.left or '', self.right or '')
-
-def find(tree, name):
-  if not tree:
-    return
-  if tree.data == name:
-    return tree
-  return find(tree.left, name) or find(tree.right, name)
 
 def answer(in_lines):
-  nodes = dict()
+  #print('\n'.join(in_lines))
+  blockers = defaultdict(list)
   for in_line in in_lines:
     #print('['+in_line.strip()+']')
     m = re.match(r'Step (.) must be finished before step (.) can begin.', in_line.strip())
@@ -27,33 +16,28 @@ def answer(in_lines):
       continue
     first = m.group(1)
     second = m.group(2)
-    fn = None
-    for n in nodes.values():
-      fn = find(n, first)
-      if fn:
-        break
-    if not fn:
-      fn = nodes.get(first)
-    if not fn:
-      fn = Tree(first)
-      nodes[first] = fn
-    fc = find(fn, second)
-    if not fc:
-      fc = nodes.get(second)
-      if fc:
-        del nodes[second]
-      else:
-        fc = Tree(second)
-    if not fn.left:
-      fn.left = fc
-    elif not fn.right:
-      fn.right = fc
-    #print(fn)
-    #print(fc)
-  for name, node in nodes.items():
-    print(name)
-    print(node)
+    blockers[second].append(first)
+  #get start node
+  print(blockers.keys())
+  print(set(chain.from_iterable(blockers.values())))
+  start_node = set(chain.from_iterable(blockers.values())) - set(blockers.keys())
+  print(start_node)
+  completed = sorted(list(start_node))
+  while True:
+    available = []
+    for cur_char in blockers.keys():
+      if cur_char in completed:
+        continue
+      if all(av in completed for av in blockers[cur_char]):
+        available.append(cur_char)
 
+    if not available:
+      break
+    available.sort()
+    print(''.join(available))
+    completed.append(available[0])
+    print(completed)
+  return ''.join(completed)
 
 @pytest.fixture
 def example_input():
@@ -68,8 +52,7 @@ def example_input():
   '''
 
 def test_answer(example_input):
-  answer(sorted(example_input.split('\n')))
-  #assert answer(sorted(example_input.split('\n'))) == 'CABDFE'
+  assert answer(sorted(example_input.split('\n'))) == 'CABDFE'
 
 if __name__ == '__main__':
   with open('{}.input'.format(DAY), 'r') as in_file:
