@@ -5,7 +5,12 @@ from collections import defaultdict
 from itertools import chain
 DAY='07'
 
+def get_time(candidate, time_sub):
+  return ord(candidate)-time_sub-4 # A: 61, B: 62 etc
+
 def answer(in_lines, num_workers, time_sub):
+  print()
+  print('Second Workers Done')
   blockers = defaultdict(list)
   for in_line in in_lines:
     m = re.match(r'Step (.) must be finished before step (.) can begin.', in_line.strip())
@@ -15,54 +20,57 @@ def answer(in_lines, num_workers, time_sub):
     second = m.group(2)
     blockers[second].append(first)
   #get start node
-  print(blockers.keys())
-  print(set(chain.from_iterable(blockers.values())))
   start_node = set(chain.from_iterable(blockers.values())) - set(blockers.keys())
-  print(start_node)
-  completed = sorted(list(start_node))
+  start_nodes = sorted(list(start_node))
+  complete = []
   time = -1
-  #increase time for start node(s)
-  #assume all start chars were executed in parallel
-  assert len(completed) <= num_workers
-  #take time of highest char
-  time += ord(completed[-1])-time_sub-4 # A: 61, B: 62 etc
-  workers = []
+  #assume start nodes can start immediately
+  assert len(start_nodes) <= num_workers
+  #fill workers
+  workers = [(n, get_time(n, time_sub)) for n in start_nodes]
+  #add remaining empty workers
+  workers.extend([('.', 0)]*(num_workers-len(start_nodes)))
   while True:
+    time += 1
+    # Determine availables
     available = []
     for cur_char in blockers.keys():
-      if cur_char in completed:
+      if cur_char in complete:
         continue
-      if all(av in completed for av in blockers[cur_char]):
+      if all(av in complete for av in blockers[cur_char]):
         available.append(cur_char)
-
-    print(time)
-    if not available and len(workers) == 0:
-      break
-    time += 1
     available.sort()
-    print(''.join(available))
+    
     # Assign work
     for candidate in available:
-      for n in range(num_workers):
-        if not any(candidate in w for w in workers):
-          if n > len(workers)-1:
-            workers.append(dict())
-          if len(workers[n]) == 0:
-            workers[n][candidate] = ord(candidate)-time_sub-4 # A: 61, B: 62 etc
-    print('Waiting ',workers)
+      if candidate in complete:
+        continue
+      if not any(candidate == w for w, c in workers):
+        for n, _ in enumerate(workers):
+          if workers[n][1] == 0:
+            workers[n] = (candidate, get_time(candidate, time_sub))
+            break
+
+    print('{time: >6} {worker_str: <7} {complete}'.format(
+      time=time,
+      worker_str=''.join(c for c,t in workers),
+      complete=''.join(complete),
+    ))
+    if not available and sum(c for w,c in workers) == 0:
+      break
+
     # Do work
-    for w in workers:
-      assert len(w.keys()) <= 1
+    for w, _ in enumerate(workers):
       ready = None
-      for c in w.keys():
-        w[c] -= 1
-        if w[c] <= 0:
-          ready = c
-      if ready:
-        workers.remove(w)
-        completed.append(ready)
-    print(completed)
-  return time, ''.join(completed)
+      if workers[w][1] > 0:
+        letter, t = workers[w]
+        t -= 1
+        workers[w] = letter, t
+        if workers[w][1] <= 0:
+          complete.append(workers[w][0])
+          workers[w] = '.', 0
+
+  return time, ''.join(complete)
 
 @pytest.fixture
 def example_input():
@@ -81,6 +89,6 @@ def test_answer(example_input):
 
 if __name__ == '__main__':
   with open('{}.input'.format(DAY), 'r') as in_file:
-    print(answer(sorted(in_file.readlines()), num_workers=5, time_sub=0))
-
+    ans = answer(sorted(in_file.readlines()), num_workers=5, time_sub=0)
+    print(ans)
 
