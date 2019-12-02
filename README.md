@@ -1,5 +1,5 @@
 # advent-of-code
-My solutions for AoC 2018
+My solutions for AoC
 
 https://adventofcode.com/
 
