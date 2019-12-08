@@ -102,3 +102,11 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+*.in
+*.input
+*.testinput
+*.output
+*.testoutput
+cookie.txt
+
