@@ -1,25 +1,27 @@
 #!/usr/bin/env python3
 import pytest
-DAY='01'
+import sys
+import fileinput
+from os.path import splitext, abspath
+
 
 def answer(in_lines):
-  return sum((int(l)//3)-2 for l in in_lines if l.strip() != '')
+    return sum((int(l)//3)-2 for l in in_lines if l.strip() != '')
 
 @pytest.fixture
 def example_input():
-  return '''
-  12
-  '''
-  #14
-  #1969
-  #100756
+    return '''
+    12
+    '''
+    #14
+    #1969
+    #100756
 
 def test_answer(example_input):
-    assert answer(example_input.split('\n')) == 2 #2, 654, 33583
+    assert answer(iter(example_input.split('\n'))) == 2 #2, 654, 33583
 
 
 if __name__ == '__main__':
-  with open('{}.input'.format(DAY), 'r') as in_file:
-    print(answer(in_file.readlines()))
+    print(answer(fileinput.input(sys.argv[1:] or splitext(abspath(__file__))[0][:-1] + '.input')))
 
 

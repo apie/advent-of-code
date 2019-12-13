@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import pytest
-DAY='01'
+import sys
+import fileinput
+from os.path import splitext, abspath
+
 
 def calc(x):
     ans = (x//3)-2 
@@ -14,16 +17,13 @@ def answer(in_lines):
 
 @pytest.fixture
 def example_input():
-  return '''
-  1969
-  '''
+    return '''
+    1969
+    '''
 
 def test_answer(example_input):
-    assert answer(example_input.split('\n')) == 966
-
+    assert answer(iter(example_input.split('\n'))) == 966
 
 if __name__ == '__main__':
-  with open('{}.input'.format(DAY), 'r') as in_file:
-    print(answer(in_file.readlines()))
-
+    print(answer(fileinput.input(sys.argv[1:] or splitext(abspath(__file__))[0][:-1] + '.input')))
 

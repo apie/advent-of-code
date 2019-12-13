@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import pytest
+import fileinput
+import sys
 DAY=12
 
 class Plants():
@@ -60,8 +62,7 @@ def test_answer(example_input, example_result):
   assert plants.sum_pots() == 325
 
 if __name__ == '__main__':
-  with open('{:02}.input'.format(DAY), 'r') as in_file:
-    in_lines = in_file.read().split('\n')
+  in_lines = [l.strip() for l in fileinput.input(sys.argv[1:] or '{:02}.input'.format(DAY))]
   plants = Plants(in_lines)
   for i in range(0, 20+1):
     if i > 0:
