@@ -1,4 +1,9 @@
 #!/bin/bash
+if [ $# -eq 0 ]
+then
+  echo 'Provide day to download input for'
+  exit 1
+fi
 DIR=$(dirname "$0")
 if [ ! -f "$DIR"/cookie.txt ]
 then
@@ -8,7 +13,4 @@ fi
 COOKIE=$(cat "$DIR"/cookie.txt)
 YEAR=2019
 DAY=$(($1)) # Convert to int to strip leading zero
-if [ $# -gt 0 ]
-then
-  curl "https://adventofcode.com/$YEAR/day/$DAY/input" -H "Cookie: session=$COOKIE" > "$DIR"/$YEAR/"$(printf "%.2d.input" "$DAY")"
-fi
+curl "https://adventofcode.com/$YEAR/day/$DAY/input" -H "Cookie: session=$COOKIE" > "$DIR"/$YEAR/"$(printf "%.2d.input" "$DAY")"
