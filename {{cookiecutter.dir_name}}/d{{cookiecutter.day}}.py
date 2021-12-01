@@ -17,5 +17,5 @@ def test_answer(example_input):
     assert answer(iter(example_input.split('\n'))) == 1
 
 if __name__ == '__main__':
-    print(answer(fileinput.input(sys.argv[1:] or splitext(abspath(__file__))[0][:-1] + '.input')))
+    print(answer(fileinput.input(sys.argv[1:] or splitext(abspath(__file__))[0][:-1] + '.input' or 'd'+splitext(abspath(__file__))[0][:-1] + '.input')))
 
