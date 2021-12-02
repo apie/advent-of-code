@@ -3,19 +3,19 @@ import pytest
 import sys
 import fileinput
 from os.path import splitext, abspath
+F_NAME = splitext(abspath(__file__))[0][:-1]
 
-
-def answer(in_lines):
-    pass
+def answer(lines):
+    for line in map(str.strip, lines):
+        print(line)
 
 @pytest.fixture
 def example_input():
-    return '''
-    '''
+    return fileinput.input(F_NAME + '.test')
 
 def test_answer(example_input):
-    assert answer(iter(example_input.split('\n'))) == 1
+    assert answer(example_input) == 1
 
 if __name__ == '__main__':
-    print(answer(fileinput.input(sys.argv[1:] or splitext(abspath(__file__))[0][:-1] + '.input' or 'd'+splitext(abspath(__file__))[0][:-1] + '.input')))
+    print(answer(fileinput.input(F_NAME + '.input')))
 
