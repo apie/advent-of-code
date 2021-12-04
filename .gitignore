@@ -110,4 +110,4 @@ venv.bak/
 *.output
 *.testoutput
 cookie.txt
-
+*.db
