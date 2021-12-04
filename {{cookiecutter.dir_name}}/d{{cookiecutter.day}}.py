@@ -17,5 +17,6 @@ def test_answer(example_input):
     assert answer(example_input) == 1
 
 if __name__ == '__main__':
-    print(answer(fileinput.input(F_NAME + '.input')))
+    ans = answer(fileinput.input(F_NAME + '.input'))
+    print(ans)
 
