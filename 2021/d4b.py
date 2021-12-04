@@ -18,33 +18,22 @@ def get_score_for_board(b, nr_just_called):
     print(f'{sum_of_unmarked=}')
     return sum_of_unmarked * nr_just_called
     
-class BingoE(Exception):
-    pass
-
 def bingo(b):
     has_bingo = False
     #check horizontal bingo
-#    breakpoint()
     for i in range(5):
         rowstart = i*5
         row=b[rowstart:rowstart+5]
         if sum(row) == -5:
-#            print('horiz bingo', row)
             has_bingo = True
-#            raise BingoE('bingo')
     #check vertical bingo
     for i in range(5):
         colstart = i
         col = [b[colstart+(0*5)], b[colstart+(1*5)] , b[colstart+(2*5)] , b[colstart+(3*5)] , b[colstart+(4*5)] ]
-#        print(col)
-#        breakpoint()
         if sum(col) == -5:
-#            print('vertic bingo', col)
             has_bingo = True
-#            raise BingoE('bingo')
     #Keep going until all the boards are checked and only then return if bingo was called
-    if has_bingo:
-        raise BingoE()
+    return has_bingo
     
 def answer(lines):
     draws = None
@@ -56,19 +45,17 @@ def answer(lines):
     print(draws)
     print(nboards)
     for iboard in range(nboards):
-#        breakpoint()
         start = (iboard*6) + 1
         board = lines[start:start+5]
-        parsed_board = [int(b)
-        for br in board
-        for b in br.replace('  ', ' ').split(' ')
-        ]
-        boards.append(parsed_board)
+        boards.append([
+            int(b)
+            for br in board
+            for b in br.replace('  ', ' ').split(' ')
+        ])
 
     print('parsed:')
     print_boards(boards)
     def draw():
-#        print('drawing..')
         drawed = draws.pop(0)
         print(f'{drawed=}')
         has_bingo = []
@@ -79,10 +66,7 @@ def answer(lines):
             except ValueError:
                 #not on board
                 pass
-#            print_board(b)
-            try:
-                bingo(b)
-            except BingoE:
+            if bingo(b):
                 has_bingo.append(ib)
                 print(f'{has_bingo=}')
         if has_bingo:
@@ -105,7 +89,6 @@ def answer(lines):
                 last_board_won = len(winners) == len(boards)
                 if last_board_won:
                     break
-#        last_board_won = len(winners) == len(boards)
     print_boards(boards)
     print(f'Getting score for board {w}')
     score = get_score_for_board(boards[w], nr_just_called)
