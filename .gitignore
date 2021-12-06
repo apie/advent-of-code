@@ -111,3 +111,4 @@ venv.bak/
 *.testoutput
 cookie.txt
 *.db
+todo.txt
