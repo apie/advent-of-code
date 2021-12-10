@@ -27,11 +27,34 @@ def get_moves_slow2(positions, move_to):
         moves += sum(range(l))+l
     return moves
 
+# This is called a triangular number:
+# https://nl.wikipedia.org/wiki/Driehoeksgetal
+# https://en.wikipedia.org/wiki/Triangular_number
+# sum(range(abs(p-move_to))) + abs(p-move_to)
+# or
+# sum(range(abs(p-move_to)+1))
+# we can also calculate it like this
+# 0.5n(n + 1)
+#
+# or / n + 1\         (n+1)!
+#    |      |   =>  -----------
+#    \   2  /       2! * (n-1)!
+from functools import lru_cache
+@lru_cache()
+def triangulator1(n):
+    return sum(range(n+1))
+# @lru_cache()
+def triangulator2(n):
+    return 0.5*n*(n+1)
 
 def get_moves(positions, move_to):
-    # Takes 27 secs
+    # Takes 27 secs with triangulator1
+    # Takes 1 sec with triangulator2 (lru_cache not even needed)
     return sum(
-        sum(range(abs(p-move_to))) + abs(p-move_to)
+        # sum(range(abs(p-move_to))) + abs(p-move_to)
+        # sum(range(abs(p-move_to)+1))
+        # triangulator1(abs(p-move_to))
+        triangulator2(abs(p-move_to))
         for p in positions
     )
 
