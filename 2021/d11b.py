@@ -29,26 +29,21 @@ def answer(lines, STEPS=1000, NROWS=10, NCOLS=10):
     def flash(n):
         def increase_adjacent(i, j):
             def increase(r, c, direction):
-                if octos[r][c] <= 9 and not (r,c) in flashers:
-#                    print(f'increasing {direction}')
-                    octos[r][c] += 1
+                try: # do check against -1 since that is valid python to get last item..
+                    if r > -1 and c > -1 and octos[r][c] <= 9 and not (r,c) in flashers:
+                        # print(f'increasing {direction}')
+                        octos[r][c] += 1
+                except IndexError:
+                    pass # outside of grid
 
-            if j > 0:
-                increase(i, j-1, 'left')
-            if i > 0 and j > 0:
-                increase(i-1, j-1, 'top left diag')
-            if i > 0:
-                increase(i-1, j, 'top')
-            if i > 0 and j < NCOLS-1:
-                increase(i-1, j+1, 'top right diag')
-            if j < NCOLS-1:
-                increase(i, j+1, 'right')
-            if i < NROWS-1 and j < NCOLS-1:
-                increase(i+1, j+1, 'bottom right diag')
-            if i < NROWS-1:
-                increase(i+1, j, 'bottom')
-            if i < NROWS-1 and j > 0:
-                increase(i+1, j-1, 'bottom left diag')
+            increase(i  , j-1, 'left')
+            increase(i-1, j-1, 'top left diag')
+            increase(i-1, j,   'top')
+            increase(i-1, j+1, 'top right diag')
+            increase(i  , j+1, 'right')
+            increase(i+1, j+1, 'bottom right diag')
+            increase(i+1, j,   'bottom')
+            increase(i+1, j-1, 'bottom left diag')
 
         # ------------------
         flashed = False
@@ -59,7 +54,7 @@ def answer(lines, STEPS=1000, NROWS=10, NCOLS=10):
                     flashed = True
 #                        print('flashing ',i,j)
                     n += 1
-                    if (i,j) not in flashers:#only allowed once per step
+                    if (i,j) not in flashers:# flash only allowed once per step
                         #increase level of octos adjacent to flashers
                         increase_adjacent(i, j)
                     flashers.add((i,j))
@@ -80,7 +75,6 @@ def answer(lines, STEPS=1000, NROWS=10, NCOLS=10):
         flash_done = False
         while not flash_done:
             flash_done, n_flashes = flash(n_flashes)
-        #octo can only flash once per step
         print_octos(octos)
         #return step at which all the octopuses flash
         if sum(
