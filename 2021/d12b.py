@@ -39,16 +39,19 @@ def answer(lines):
     size_incr = True
     while size_incr:
         prevsize = len(routes)
-        for r in list(routes):
+        newroutes = set()
+        for r in routes:
             if r[-1] == 'end':
                 continue #route complete
             for p in G[r[-1]]:
+                if r+(p,) in routes or r+(p,) in newroutes:
+                    continue # exists already
                 if p == 'start':
                     continue # dont go back to start
                 if 'end' in r:
                     continue
 
-                if p.islower():
+                if p.islower() and p != 'end':
                     if sum(1 for c in r if c==p) > 1:
                         continue # dont go to small caves more than twice
                     if p in r:
@@ -58,7 +61,8 @@ def answer(lines):
                         if small_cave_visited_more_than_once:
                             continue # dont go to small caves more than once if someone has visited a cave twice
 
-                routes.add(r+(p,))
+                newroutes.add(r+(p,))
+        routes.update(newroutes)
         size = len(routes)
         size_incr = size > prevsize
     pr()
