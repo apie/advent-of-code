@@ -17,6 +17,11 @@ def test_answer(example_input):
     assert answer(example_input) == 1
 
 if __name__ == '__main__':
-    ans = answer(fileinput.input(F_NAME + '.input'))
-    print(ans)
+    import timeit
+    start = timeit.default_timer()
+    filename = fileinput.input(F_NAME + '.input')
+    ans = answer(filename)
+    print('Answer:', ans)
+    duration = timeit.default_timer()-start
+    print(f'Execution time: {duration:.3f} s')
 
