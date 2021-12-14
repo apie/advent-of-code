@@ -112,3 +112,4 @@ venv.bak/
 cookie.txt
 *.db
 todo.txt
+output.txt
