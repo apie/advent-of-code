@@ -67,8 +67,11 @@ if __name__ == '__main__':
             name = m['name']
             if len(done) == len(puzzles_done[name]):
                 continue # nothing changed
-            dt = datetime.now()
-            print(f'[{dt.strftime("%Y-%m-%d %H:%M:%S")}] {name} just solved {" and ".join(done.difference(puzzles_done[name]))}!', flush=True)
+            for p_done in sorted(done.difference(puzzles_done[name])):
+                _, day, _, part = p_done.split()
+                dt = datetime.fromtimestamp(m['completion_day_level'][day][part]['get_star_ts'])
+                print(f'[{dt.strftime("%Y-%m-%d %H:%M:%S")}] {name} solved {p_done}!', flush=True)
+            # Save new state
             puzzles_done[name] = done
 
 
