@@ -38,6 +38,17 @@ def answer(lines):
                 newline.append(newc)
             newlinesb.append(''.join(map(str, newline)))
     newlines.extend(newlinesb)
+    # The segments are diagonally mirrored. We can remove the duplicate segments since the route will never go to segment one and its duplicate.
+    #
+    # x a c      x
+    # a b d ---> a b
+    # c d e      c d e
+    #
+    segment_s = origmaxx+1
+    newlines = [
+        line[:segment_s*((i//segment_s)+1)]
+        for i, line in enumerate(map(str.strip, newlines))
+    ]
     assert len(newlines) == maxy+1
     return lowest_total_risk(newlines)
 

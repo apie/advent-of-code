@@ -13,7 +13,7 @@ def answer(lines):
     #return the total risk of the path with the lowest total
     lines = list(lines)
     maxy = len(lines)-1
-    maxx = len(lines[0].strip())-1
+    maxx = len(lines[-1].strip())-1
     print()
     G = nx.DiGraph()
     # input is a map of risk levels
