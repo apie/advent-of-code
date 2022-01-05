@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import pytest
-import sys
 import fileinput
 from os.path import splitext, abspath
 F_NAME = splitext(abspath(__file__))[0][:-1]
