@@ -4,6 +4,7 @@
 
 import os
 import requests
+from requests.exceptions import JSONDecodeError
 import json
 from datetime import datetime, timedelta, date
 from pathlib import Path
@@ -37,6 +38,10 @@ def update_cache():
     r = s.get(STATS_URL, cookies=dict(session=COOKIE), timeout=5)
     r.raise_for_status()
     stats = r.text
+    try:
+        r.json()
+    except JSONDecodeError:
+        raise Exception('Response was not JSON. You probably need to renew your cookie!')
     with open(FILENAME, "w") as f:
         f.write(stats)
     return stats
