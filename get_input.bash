@@ -1,7 +1,8 @@
 #!/bin/bash
-if [ $# -eq 0 ]
+set -euo pipefail
+if [ $# -lt 2 ]
 then
-  echo 'Provide day to download input for'
+  echo 'Provide day and year to download input for'
   exit 1
 fi
 DIR=$(dirname "$0")
@@ -11,6 +12,6 @@ then
   exit 1
 fi
 COOKIE=$(cat "$DIR"/cookie.txt)
-YEAR=2021
+YEAR=$2
 DAY=$(($1)) # Convert to int to strip leading zero
 curl "https://adventofcode.com/$YEAR/day/$DAY/input" -H "Cookie: session=$COOKIE" > "$DIR"/$YEAR/d"$(printf "%.d.input" "$DAY")"
