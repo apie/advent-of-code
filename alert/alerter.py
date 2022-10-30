@@ -2,9 +2,10 @@
 # Print a line when someone from your private leaderboard on adventofcode.com solves a puzzle. Updates at most every 15 minutes since more is not allowed.
 # By Apie 2021-12-13
 
+import sys
 import os
 import requests
-from requests.exceptions import JSONDecodeError
+#from requests.exceptions import JSONDecodeError
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -16,10 +17,11 @@ COOKIE_FILE = dirname(abspath(__file__)) + '/../cookie.txt'
 with open(COOKIE_FILE) as f:
     COOKIE = f.read().strip()
 
-YEAR = 2021
+YEAR = sys.argv[1]
+UPDATE_FREQ_MINUTES = 1 if len(sys.argv) == 2 else int(sys.argv[2])
 LEADERBOARD_ID = 380357
 STATS_URL = f'https://adventofcode.com/{YEAR}/leaderboard/private/view/{LEADERBOARD_ID}.json'
-FILENAME = Path(dirname(abspath(__file__)) + '/cache.txt')
+FILENAME = Path(dirname(abspath(__file__)) + f'/cache_{YEAR}.txt')
 
 s = requests.session()
 
@@ -40,7 +42,7 @@ def update_cache():
     stats = r.text
     try:
         r.json()
-    except JSONDecodeError:
+    except:
         raise Exception('Response was not JSON. You probably need to renew your cookie!')
     with open(FILENAME, "w") as f:
         f.write(stats)
@@ -67,7 +69,7 @@ if __name__ == '__main__':
         puzzles_done[name] = get_done_set(m)
 
     while True:
-        sleep(60)
+        sleep(60 * UPDATE_FREQ_MINUTES)
         stats = json.loads(get_stats())
         for m_id, m in stats['members'].items():
             done = get_done_set(m)
@@ -77,6 +79,6 @@ if __name__ == '__main__':
             for p_done in sorted(done.difference(puzzles_done[name])):
                 _, day, _, part = p_done.split()
                 dt = datetime.fromtimestamp(m['completion_day_level'][day][part]['get_star_ts'])
-                print(f'[{dt.strftime("%Y-%m-%d %H:%M:%S")}] {name} solved {p_done}!', flush=True)
+                print(f'[{dt.strftime("%Y-%m-%d %H:%M:%S")}] {name} solved {YEAR} {p_done}!', flush=True)
             # Save new state
             puzzles_done[name] = done
