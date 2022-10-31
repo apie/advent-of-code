@@ -26,10 +26,10 @@ FILENAME = Path(dirname(abspath(__file__)) + f'/cache_{YEAR}.txt')
 s = requests.session()
 
 
-def get_from_cache() -> str:
+def get_from_cache(remove_old_cache=True) -> str:
     if not FILENAME.exists():
         return
-    if datetime.fromtimestamp(FILENAME.stat().st_mtime) + timedelta(minutes=15) < datetime.now():
+    if remove_old_cache and datetime.fromtimestamp(FILENAME.stat().st_mtime) + timedelta(minutes=15) < datetime.now():
         os.remove(FILENAME)
         return
     with open(FILENAME) as f:
@@ -49,8 +49,8 @@ def update_cache():
     return stats
 
 
-def get_stats():
-    return get_from_cache() or update_cache()
+def get_stats(remove_old_cache=True):
+    return get_from_cache(remove_old_cache) or update_cache()
 
 
 def get_done_set(m):
@@ -63,7 +63,8 @@ def get_done_set(m):
 
 if __name__ == '__main__':
     puzzles_done = dict()
-    stats = json.loads(get_stats())
+    # Keep old cache so that we get notified of all the differences since the last time.
+    stats = json.loads(get_stats(remove_old_cache=False))
     for m_id, m in stats['members'].items():
         name = m['name']
         puzzles_done[name] = get_done_set(m)
