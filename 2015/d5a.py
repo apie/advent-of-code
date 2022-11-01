@@ -35,40 +35,16 @@ def answer(lines):
     )
 
 
-@pytest.fixture
-def example_input():
-    return fileinput.input(F_NAME + '.test')
+@pytest.mark.parametrize('testfileno, expected', [
+    (1, 1),
+    (2, 1),
+    (3, 0),
+    (4, 0),
+    (5, 0),
+])
+def test_answer_testfiles(testfileno, expected):
+    assert answer(fileinput.input(f"{F_NAME}.test.{testfileno}")) == expected
 
-def test_answer(example_input):
-    assert answer(example_input) == 1
-
-@pytest.fixture
-def example_input2():
-    return fileinput.input(F_NAME + '.test.2')
-
-def test_answer2(example_input2):
-    assert answer(example_input2) == 1
-
-@pytest.fixture
-def example_input3():
-    return fileinput.input(F_NAME + '.test.3')
-
-def test_answer3(example_input3):
-    assert answer(example_input3) == 0
-
-@pytest.fixture
-def example_input4():
-    return fileinput.input(F_NAME + '.test.4')
-
-def test_answer4(example_input4):
-    assert answer(example_input4) == 0
-
-@pytest.fixture
-def example_input5():
-    return fileinput.input(F_NAME + '.test.5')
-
-def test_answer5(example_input5):
-    assert answer(example_input5) == 0
 
 if __name__ == '__main__':
     import timeit

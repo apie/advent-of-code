@@ -20,17 +20,14 @@ def answer(lines):
     )
 
 
-def test_answer():
-    assert answer(['qjhvhtzxzqqjkmpb']) == 1
-
-def test_answer2():
-    assert answer(['xxyxx']) == 1
-
-def test_answer3():
-    assert answer(['uurcxstgmygtbstg']) == 0
-
-def test_answer4():
-    assert answer(['ieodomkazucvgmuy']) == 0
+@pytest.mark.parametrize('inp, expected', [
+    ('qjhvhtzxzqqjkmpb', 1),
+    ('xxyxx', 1),
+    ('uurcxstgmygtbstg', 0),
+    ('ieodomkazucvgmuy', 0),
+])
+def test_answer_literals(inp, expected):
+    assert answer([inp]) == expected
 
 
 if __name__ == '__main__':

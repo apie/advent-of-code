@@ -8,12 +8,18 @@ def answer(lines):
     for line in map(str.strip, lines):
         print(line)
 
-@pytest.fixture
-def example_input():
-    return fileinput.input(F_NAME + '.test')
+@pytest.mark.parametrize('inp, expected', [
+#    ('', 1),
+])
+def test_answer_literals(inp, expected):
+    assert answer([inp]) == expected
 
-def test_answer(example_input):
-    assert answer(example_input) == 1
+
+@pytest.mark.parametrize('testfileno, expected', [
+#    (1, 1),
+])
+def test_answer_testfiles(testfileno, expected):
+    assert answer(fileinput.input(f"{F_NAME}.test.{testfileno}")) == expected
 
 if __name__ == '__main__':
     import timeit
