@@ -1,6 +1,5 @@
 cookiecutter
 pytest
-timeit
 coordinates
 networkx
 bitstring
