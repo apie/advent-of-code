@@ -113,3 +113,7 @@ cookie.txt
 *.db
 todo.txt
 output.txt
+
+*.o
+program
+
