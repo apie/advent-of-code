@@ -1,4 +1,5 @@
 PROGRAM d3;
+USES sysutils;
 
 FUNCTION score(c:char) : integer;
 CONST
@@ -22,6 +23,7 @@ VAR
     i: integer;
     totscore: integer = 0;
 BEGIN
+    IF NOT FileExists(filename) THEN writeln('file not found: ', filename);
     assign(f, filename);
     reset(f);
     WHILE not eof(f) DO
@@ -56,7 +58,5 @@ BEGIN
     assert(answer(testfile) = 157, 'test faal');
     a := answer(filename);
     assert(a > 7862);
-    writeln('');
     writeln('answer: ', a);
-    writeln('klaar');
 END.
