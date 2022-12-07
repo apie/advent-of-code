@@ -3,33 +3,28 @@ USES sysutils, classes, fgl;
 
 	FUNCTION answer(filename:string) : int64;
 	TYPE
-		FStrucMap = specialize TFPGMap<string, TStringList>;
 		FSizeMap = specialize TFPGMap<string, int64>;
 	VAR
-		filesystem_structure: FStrucMap;
-		filesystem_size: FSizeMap;
+		sizes: FSizeMap;
 
 		PROCEDURE parse_input;
 		VAR
-			f: text;
-			l: string = '';
 			curdir: TStringList;
+			f: text;
+			l: string;
 			arg: string;
-			s: string;
-			p: integer;
-			si: int64;
-			parent: string;
-			name: string;
+			sizecol: string;
+			i: integer;
+			size: int64;
+			dirname: string;
 		BEGIN
-			answer := 0;
 			curdir := TStringList.Create;
-			filesystem_structure := FStrucMap.Create;
-			filesystem_size := FSizeMap.Create;
+			sizes := FSizeMap.Create;
 			assign(f, filename);
 			reset(f);
 			REPEAT
 				readln(f, l);
-				IF l[1] = '$' THEN
+				IF l[1] = '$' THEN{a command}
 					CASE copy(l, 3, 2) OF
 						'cd':
 						BEGIN
@@ -40,76 +35,43 @@ USES sysutils, classes, fgl;
 						'ls': ;
 						ELSE writeln('unknown command!');
 					END
-				ELSE
+				ELSE {not a command. ls-output}
 				BEGIN
-					p := pos(' ', l);
-					s := copy(l, 1, p-1);
-					name := copy(l, p+1);
-					parent := curdir[curdir.Count-1];
-					IF s = 'dir' THEN
-					BEGIN
-						IF filesystem_structure.IndexOf(parent) = -1 THEN filesystem_structure[parent] := TStringList.Create;
-						filesystem_structure[parent].Add(name);
-						si := 0;
-					END
-					ELSE si := strtoint(s);
-					IF filesystem_size.IndexOf(parent) = -1 THEN filesystem_size[parent] := 0;
-					filesystem_size[parent] := filesystem_size[parent] + si;
+					sizecol := copy(l, 1, pos(' ', l)-1);
+					IF sizecol = 'dir' THEN size := 0
+					ELSE size := strtoint64(sizecol);
+
+                    {we can add this size to the current dir and all the dirs above it}
+                    FOR i:= 0 TO curdir.Count-1 DO
+                    BEGIN
+                        dirname := curdir[i];
+                        IF sizes.IndexOf(dirname) = -1 THEN sizes[dirname] := 0;
+                        sizes[dirname] := sizes[dirname] + size;
+                    END;
 				END;
 			UNTIL eof(f);
 			close(f);
-			curdir.Free;
+			curdir.Free();
 		END;
 
 	VAR
-		i,j: integer;
+		i: integer;
 		key: string;
-		s: int64;
+		size: int64;
 	BEGIN{answer}
 		answer := 0;
 		parse_input;
 
-		writeln('xxxxxxxxx-structure-x');
-		FOR i:=0 TO filesystem_structure.Count-1 DO
-		BEGIN
-			writeln('- ', filesystem_structure.Keys[i], ' ');
-			FOR j:=0 TO filesystem_structure[filesystem_structure.Keys[i]].Count-1 DO
-				writeln('  - ', filesystem_structure[filesystem_structure.Keys[i]][j], ' ');
-			writeln();
+		writeln('*********** sizes');
+		FOR i:=0 TO sizes.Count-1 DO BEGIN
+			key := sizes.Keys[i];
+			size := sizes[key];
+			IF size <= 100000 THEN BEGIN
+                answer += size;
+                writeln(answer, ' ', key, ' ', size);
+            END;
 		END;
-		writeln('xxxxxxxxx-sizes-x');
-		FOR i:=0 TO filesystem_size.Count-1 DO
-		BEGIN
-			key := filesystem_size.Keys[i];
-			writeln(key, ' ', filesystem_size[key]);
-		END;
-		{Now we have per directory the size and per directory the location in the tree. We need to sum all the directories that are not in the root.}
-{FIXME do this directly while parsing: on every ls, we can sum the dir and all the items in curdir. then we will be done in one pass!}
-{FIXME test passes but answer is wrong, what about multiple nested dirs}
-		writeln('xxxxxxxxx-summed for every dir all the underlying dirs-x');
-		FOR i:=0 TO filesystem_structure.Count-1 DO
-		BEGIN
-			key := filesystem_structure.Keys[i];
-			IF key = '/' THEN continue; {not interested}
-			writeln(key, ' ');
-			FOR j:=0 TO filesystem_structure[key].Count-1 DO
-			BEGIN
-				writeln('\ ', filesystem_structure[key][j], ' ');
-				filesystem_size[key] := filesystem_size[key] + filesystem_size[filesystem_structure[key][j]];
-			END;
-			writeln();
-		END;
-		writeln();
-		writeln('xxxxxxxxx-sizes incl subdir -x');
-		FOR i:=0 TO filesystem_size.Count-1 DO
-		BEGIN
-			key := filesystem_size.Keys[i];
-			s := filesystem_size[key];
-			writeln(key, ' ', s);
-			IF s <= 100000 THEN answer += s;
-		END;
-		filesystem_size.Free;
-		filesystem_structure.Free;
+		sizes.Free();
 	END;
 
 CONST
@@ -120,9 +82,10 @@ VAR
     a: int64;
 BEGIN{d7a}
     assert(answer(testfile1) = 95437, 'test 1 faal');
-    assert(answer(testfile2) = 2, 'test 2 faal');
+    assert(answer(testfile2) = 3, 'test 2 faal');
     a := answer(filename);
 	assert(a > 977275);
+	assert(a > 1072909);
     writeln('');
     writeln('answer: ', a);
 END.
