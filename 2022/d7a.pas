@@ -1,109 +1,128 @@
 PROGRAM d7a;
 USES sysutils, classes, fgl;
 
-	FUNCTION answer(filename:string) : longint;
+	FUNCTION answer(filename:string) : int64;
 	TYPE
-{	fsrecord = RECORD size: longint; parent: string END;}
-		FStrucMap = specialize TFPGMap<string, string>;
-		FSizeMap = specialize TFPGMap<string, longint>;
-	{
-	  create above instance with
-	  MClassMap := TMClassMap.Create;
-	  somewhere and you can use it this way:
-	  to put: MClassMap['strategy 1'] := TStrategyOneXX;
-	  to get: SomeVar := MClassMap['strategy 1'];
-	}
+		FStrucMap = specialize TFPGMap<string, TStringList>;
+		FSizeMap = specialize TFPGMap<string, int64>;
 	VAR
 		filesystem_structure: FStrucMap;
 		filesystem_size: FSizeMap;
-		f: text;
-		l: string = '';
-		curdir: TStringList;
-		arg: string;
-		i: integer;
-{	curfile: fsrecord;}
-		s: string;
-		p: integer;
-		si: longint;
-parent: string;
-name: string;
-	BEGIN
-		answer := 0;
-		curdir := TStringList.Create;
-		filesystem_structure := FStrucMap.Create;
-		filesystem_size := FSizeMap.Create;
-		assign(f, filename);
-		reset(f);
-		REPEAT
-			readln(f, l);
-			IF l[1] = '$' THEN
-			BEGIN
-				CASE copy(l, 3, 2) OF
-					'cd':
-					BEGIN
-						arg := copy(l, 6, length(l)-5);
-{
-						writeln('change directory');
-						writeln(arg);
-}
-						IF arg = '..' THEN curdir.Delete(curdir.Count-1)
-						ELSE IF arg = '/' THEN curdir.Add(trim(arg))
-						ELSE curdir.Add('/'+trim(arg));
-					END;
-					'ls': ;
-					ELSE writeln('unknown command!');
-				END;
-			END
-			ELSE
-			BEGIN
-writeln('curdir:',curdir.Text);
-{
-				FOR i:=0 TO curdir.Count-1 DO write(curdir[i]);
-				writeln();
-				writeln(l);
-}
-				p := pos(' ', l);
-				s := copy(l, 1, p-1);
-				name := copy(l, p+1);
-writeln('name:',name);
-{
-			writeln(p);
-				writeln(s);
-}
-				parent := curdir[curdir.Count-1];
-				IF s = 'dir' THEN
+
+		PROCEDURE parse_input;
+		VAR
+			f: text;
+			l: string = '';
+			curdir: TStringList;
+			arg: string;
+			s: string;
+			p: integer;
+			si: int64;
+			parent: string;
+			name: string;
+		BEGIN
+			answer := 0;
+			curdir := TStringList.Create;
+			filesystem_structure := FStrucMap.Create;
+			filesystem_size := FSizeMap.Create;
+			assign(f, filename);
+			reset(f);
+			REPEAT
+				readln(f, l);
+				IF l[1] = '$' THEN
+					CASE copy(l, 3, 2) OF
+						'cd':
+						BEGIN
+							arg := copy(l, 6, length(l)-5);
+							IF arg = '..' THEN curdir.Delete(curdir.Count-1)
+							ELSE curdir.Add(trim(arg));
+						END;
+						'ls': ;
+						ELSE writeln('unknown command!');
+					END
+				ELSE
 				BEGIN
-					filesystem_structure[name] := parent;
-					si := 0;
-				END
-				ELSE si := strtoint(s);
-				writeln(parent, ', f  :', si, ';');
-				IF filesystem_size.IndexOf(parent) = -1 THEN filesystem_size[parent] := 0;
-				filesystem_size[parent] := filesystem_size[parent] + si;
-				writeln(parent, ', tot:', filesystem_size[parent], ';');
-			END;
-		UNTIL eof(f);
-		close(f);
-		curdir.Free;
+					p := pos(' ', l);
+					s := copy(l, 1, p-1);
+					name := copy(l, p+1);
+					parent := curdir[curdir.Count-1];
+					IF s = 'dir' THEN
+					BEGIN
+						IF filesystem_structure.IndexOf(parent) = -1 THEN filesystem_structure[parent] := TStringList.Create;
+						filesystem_structure[parent].Add(name);
+						si := 0;
+					END
+					ELSE si := strtoint(s);
+					IF filesystem_size.IndexOf(parent) = -1 THEN filesystem_size[parent] := 0;
+					filesystem_size[parent] := filesystem_size[parent] + si;
+				END;
+			UNTIL eof(f);
+			close(f);
+			curdir.Free;
+		END;
+
+	VAR
+		i,j: integer;
+		key: string;
+		s: int64;
+	BEGIN{answer}
+		answer := 0;
+		parse_input;
 
 		writeln('xxxxxxxxx-structure-x');
-		FOR i:=0 TO filesystem_structure.Count-1 DO writeln(filesystem_structure.Keys[i], ' ', filesystem_structure[filesystem_structure.Keys[i]]);
+		FOR i:=0 TO filesystem_structure.Count-1 DO
+		BEGIN
+			writeln('- ', filesystem_structure.Keys[i], ' ');
+			FOR j:=0 TO filesystem_structure[filesystem_structure.Keys[i]].Count-1 DO
+				writeln('  - ', filesystem_structure[filesystem_structure.Keys[i]][j], ' ');
+			writeln();
+		END;
 		writeln('xxxxxxxxx-sizes-x');
-		FOR i:=0 TO filesystem_size.Count-1 DO writeln(filesystem_size.Keys[i], ' ', filesystem_size[filesystem_size.Keys[i]]);
+		FOR i:=0 TO filesystem_size.Count-1 DO
+		BEGIN
+			key := filesystem_size.Keys[i];
+			writeln(key, ' ', filesystem_size[key]);
+		END;
 		{Now we have per directory the size and per directory the location in the tree. We need to sum all the directories that are not in the root.}
-		{TODO}
-		{TODO now select only te
-
+{FIXME do this directly while parsing: on every ls, we can sum the dir and all the items in curdir. then we will be done in one pass!}
+{FIXME test passes but answer is wrong, what about multiple nested dirs}
+		writeln('xxxxxxxxx-summed for every dir all the underlying dirs-x');
+		FOR i:=0 TO filesystem_structure.Count-1 DO
+		BEGIN
+			key := filesystem_structure.Keys[i];
+			IF key = '/' THEN continue; {not interested}
+			writeln(key, ' ');
+			FOR j:=0 TO filesystem_structure[key].Count-1 DO
+			BEGIN
+				writeln('\ ', filesystem_structure[key][j], ' ');
+				filesystem_size[key] := filesystem_size[key] + filesystem_size[filesystem_structure[key][j]];
+			END;
+			writeln();
+		END;
+		writeln();
+		writeln('xxxxxxxxx-sizes incl subdir -x');
+		FOR i:=0 TO filesystem_size.Count-1 DO
+		BEGIN
+			key := filesystem_size.Keys[i];
+			s := filesystem_size[key];
+			writeln(key, ' ', s);
+			IF s <= 100000 THEN answer += s;
+		END;
+		filesystem_size.Free;
+		filesystem_structure.Free;
 	END;
 
 CONST
     testfile1 = 'd7.test.1';
+    testfile2 = 'd7.test.2';
     filename = 'd7.input';
 VAR
-    a: longint;
+    a: int64;
 BEGIN{d7a}
     assert(answer(testfile1) = 95437, 'test 1 faal');
+    assert(answer(testfile2) = 2, 'test 2 faal');
     a := answer(filename);
+	assert(a > 977275);
     writeln('');
     writeln('answer: ', a);
 END.
