@@ -4,7 +4,7 @@ TYPE
     longintlist= TInt64List;
 
     FUNCTION answer(filename:string) : longint;
-        
+
     VAR
         f: text;
         l: string;
