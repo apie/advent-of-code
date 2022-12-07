@@ -107,7 +107,6 @@ venv.bak/
 *.input
 *.input.*
 *.testinput
-*.test.*
 *.output
 *.testoutput
 cookie.txt
