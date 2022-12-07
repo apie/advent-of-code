@@ -116,6 +116,7 @@ todo.txt
 output.txt
 
 *.o
+*.ppu
 program
 *.ppu
 
