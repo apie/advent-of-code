@@ -1,4 +1,4 @@
-PROGRAM d3;
+PROGRAM d3a;
 USES sysutils;
 
 FUNCTION score(c:char) : integer;
@@ -52,7 +52,7 @@ CONST
     filename = 'd3.input';
 VAR
     a : integer;
-BEGIN
+BEGIN{d3a}
     assert(1=score('a'));
     assert(27=score('A'));
     assert(answer(testfile) = 157, 'test faal');
