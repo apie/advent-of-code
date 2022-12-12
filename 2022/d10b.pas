@@ -8,9 +8,10 @@ TYPE
         f: text;
         l: string;
         x: integer = 1;
-        cycle: integer = 0;
+        cycle: 1..240;
         instructions: TIntegerList;
-        row, col: integer;
+        row: 0..5;
+        col: 0..39;
     BEGIN
         IF NOT FileExists(filename) THEN BEGIN writeln('file not found: ', filename); halt; END;
         instructions := TIntegerList.Create;
@@ -25,16 +26,16 @@ TYPE
         END;
         close(f);
 
-        FOR row:=0 TO 5 DO
-            FOR col:=0 TO 39 DO
-                answer[row][col] := '.';
+        FOR row:=low(row) TO high(row) DO
+            FOR col:=low(col) to high(col) DO
+                answer[row,col] := '.';
 
         FOR cycle:=1 TO instructions.Count DO
         BEGIN
             row := (cycle-1) div 40;
             col := (cycle-1) mod 40;
             IF (x-1=col) OR (x=col) OR (x+1=col) THEN
-              answer[row][col] := '#';
+              answer[row,col] := '#';
 
             inc(x, instructions[cycle-1]);
         END;
