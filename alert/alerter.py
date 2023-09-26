@@ -15,9 +15,11 @@ from time import sleep
 
 COOKIE_FILE = dirname(abspath(__file__)) + '/../cookie.txt'
 with open(COOKIE_FILE) as f:
-    COOKIE = f.read().strip()
+    # file with just the session id in it or session:"xx"
+    COOKIE = f.read().strip().split(':')[-1].strip('"')
 
 YEAR = sys.argv[1]
+# TODO read from arg
 LEADERBOARD_ID = 380357
 STATS_URL = f'https://adventofcode.com/{YEAR}/leaderboard/private/view/{LEADERBOARD_ID}.json'
 FILENAME = Path(dirname(abspath(__file__)) + f'/cache_{YEAR}.txt')
