@@ -14,4 +14,10 @@ fi
 COOKIE=$(cat "$DIR"/cookie.txt)
 YEAR=$1
 DAY=$(($2)) # Convert to int to strip leading zero
-curl "https://adventofcode.com/$YEAR/day/$DAY/input" -H "Cookie: session=$COOKIE" > "$DIR"/$YEAR/d"$(printf "%.d.input" "$DAY")"
+FILENAME="$DIR"/$YEAR/d"$(printf "%.d.input" "$DAY")"
+curl "https://adventofcode.com/$YEAR/day/$DAY/input" -H "Cookie: session=$COOKIE" > $FILENAME
+if [ "$(cat $FILENAME)" == "Puzzle inputs differ by user.  Please log in to get your puzzle input." ]
+then
+    echo 'Expired cookie! Log in again'
+    exit 1
+fi
