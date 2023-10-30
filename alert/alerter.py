@@ -13,16 +13,15 @@ from os.path import dirname, abspath
 from time import sleep
 
 
-COOKIE_FILE = dirname(abspath(__file__)) + '/../cookie.txt'
+COOKIE_FILE = dirname(abspath(__file__)) + '/cookie.txt'
 with open(COOKIE_FILE) as f:
     # file with just the session id in it or session:"xx"
     COOKIE = f.read().strip().split(':')[-1].strip('"')
 
 YEAR = sys.argv[1]
-# TODO read from arg
-LEADERBOARD_ID = 380357
+LEADERBOARD_ID = sys.argv[2]
 STATS_URL = f'https://adventofcode.com/{YEAR}/leaderboard/private/view/{LEADERBOARD_ID}.json'
-FILENAME = Path(dirname(abspath(__file__)) + f'/cache_{YEAR}.txt')
+FILENAME = Path(dirname(abspath(__file__)) + f'/cache_{LEADERBOARD_ID}_{YEAR}.txt')
 
 s = requests.session()
 
@@ -44,7 +43,10 @@ def update_cache():
     try:
         r.json()
     except:
-        raise Exception('Response was not JSON. You probably need to renew your cookie!')
+        if b'You can join a private leaderboard by entering its join code here:' in r.content:
+            raise Exception('Invalid board id provided.')
+        else:
+            raise Exception('Response was not JSON. You probably need to renew your cookie!')
     with open(FILENAME, "w") as f:
         f.write(stats)
     return stats

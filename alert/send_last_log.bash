@@ -1,7 +1,10 @@
 #!/bin/bash
 set -eu
-YEAR=$1
-touch $YEAR/log.txt
-touch $YEAR/sent.txt
-diff $YEAR/log.txt $YEAR/sent.txt | grep '<' | ~/.local/bin/telegram-send --config ~/telegram/send/denicksbot/oud-scintilla-aoc.conf --stdin
-cp $YEAR/log.txt $YEAR/sent.txt
+LEADERBOARD_ID=$1
+YEAR=$2
+CONFIGFILE=$3
+mkdir -p $LEADERBOARD_ID/$YEAR
+touch $LEADERBOARD_ID/$YEAR/log.txt
+touch $LEADERBOARD_ID/$YEAR/sent.txt
+diff $LEADERBOARD_ID/$YEAR/log.txt $LEADERBOARD_ID/$YEAR/sent.txt | grep '<' | telegram-send --config $CONFIGFILE --stdin
+cp $LEADERBOARD_ID/$YEAR/log.txt $LEADERBOARD_ID/$YEAR/sent.txt
