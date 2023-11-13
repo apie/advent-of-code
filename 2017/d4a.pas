@@ -3,32 +3,30 @@ USES sysutils, strutils;
 
     FUNCTION answer(filename:string) : longint;
     VAR
-        f: text;
-        l: string;
-        x: TStringArray;
-        i, j: integer;
+        file_text: text;
+        line_s: string;
+        words: TStringArray;
+        i_currentword, i_foundword: integer;
         valid: boolean;
     BEGIN{answer}
         answer := 0;
-        assign(f, filename);
-        reset(f);
+        assign(file_text, filename);
+        reset(file_text);
         REPEAT
-            readln(f, l);
-            l := trim(l);
-            writeln(l);
-            x := SplitString(l, ' ');
+            {check each line}
+            readln(file_text, line_s);
+            line_s := trim(line_s);
+            words := SplitString(line_s, ' ');
             valid := true;
-            FOR i:=0 TO length(x)-1 DO
-                FOR j:=0 TO length(x)-1 DO
-                    IF i<>j THEN
-                        IF (x[i] = x[j]) THEN
-                        BEGIN
-                            writeln('-> ', x[i], x[j]);
-                            valid := false;
-                        END;
-            IF valid THEN answer := answer + 1;
-        UNTIL eof(f);
-        close(f);
+            {go through each word on the line and compare with the other words on the line. if a word appears more than once, mark line as invalid}
+            FOR i_currentword:=0 TO length(words)-1 DO
+            BEGIN
+                i_foundword := IndexStr(words[i_currentword], words);
+                IF (i_foundword > -1) AND (i_currentword <> i_foundword) THEN valid := false;
+            END;
+            IF valid THEN inc(answer);
+        UNTIL eof(file_text);
+        close(file_text);
         writeln('ans: ',answer);
     END;
 

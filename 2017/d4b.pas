@@ -4,51 +4,51 @@ USES sysutils, strutils;
     FUNCTION anagram(const s1, s2:string) : boolean;
     VAR
         t1, t2: string;
-        i,j: integer;
+        i_t1char_in_t2,
+        i_currentchar_t1: integer;
     BEGIN
         anagram := false;
-        t1 := s1;
-        t2 := s2;
-        IF length(t1) <> length(t2) THEN anagram := false
-        ELSE
+        IF length(s1) = length(s2) THEN
         BEGIN
-          FOR i:=1 TO length(t1) DO
-          BEGIN
-              FOR j:=1 TO length(t1) DO
-            IF t1[i] = t2[j] THEN
+            t1 := s1;
+            t2 := s2;
+            FOR i_currentchar_t1:=1 TO length(t1) DO
             BEGIN
-                t1[i] := '.';
-                t2[j] := '.';
+                i_t1char_in_t2 := pos(t1[i_currentchar_t1], t2);
+                {check each char of t1. if it appears in t2. mark the chars in t1 and t2.}
+                IF i_t1char_in_t2 > 0 THEN
+                BEGIN
+                    t1[i_currentchar_t1] := '.';
+                    t2[i_t1char_in_t2] := '.';
+                END;
             END;
-          END;
-          IF t1 = t2 THEN anagram := true;
+            IF t1 = t2 THEN anagram := true;
         END;
     END;
 
     FUNCTION answer(filename:string) : longint;
     VAR
-        f: text;
-        l: string;
-        x: TStringArray;
-        i, j: integer;
+        file_text: text;
+        line_s: string;
+        words: TStringArray;
+        i_currentword, j_currentword: integer;
         valid: boolean;
     BEGIN{answer}
         answer := 0;
-        assign(f, filename);
-        reset(f);
+        assign(file_text, filename);
+        reset(file_text);
         REPEAT
-            readln(f, l);
-            l := trim(l);
-            writeln(l);
-            x := SplitString(l, ' ');
+            readln(file_text, line_s);
+            line_s := trim(line_s);
+            words := SplitString(line_s, ' ');
             valid := true;
-            FOR i:=0 TO length(x)-1 DO
-                FOR j:=0 TO length(x)-1 DO
-                    IF i<>j THEN
-                        IF anagram(x[i], x[j]) THEN valid := false;
+            FOR i_currentword:=0 TO length(words)-1 DO
+                FOR j_currentword:=0 TO length(words)-1 DO
+                    IF i_currentword<>j_currentword THEN
+                        IF anagram(words[i_currentword], words[j_currentword]) THEN valid := false;
             IF valid THEN inc(answer);
-        UNTIL eof(f);
-        close(f);
+        UNTIL eof(file_text);
+        close(file_text);
         writeln('ans: ',answer);
     END;
 
