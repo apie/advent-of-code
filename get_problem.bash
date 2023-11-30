@@ -24,13 +24,13 @@ fi
 # Install pup: `go install github.com/ericchiang/pup@latest`
 # Info: https://github.com/ericchiang/pup
 # Save part 1 and part 2 as separate files.
-P1_FILENAME="$DIR"/$YEAR/d"$(printf "%.da.html" "$DAY")"
+P1_FILENAME="$DIR"/$YEAR/d"$(printf "%02da.html" "$DAY")"
 cat $TMP_FILENAME | pup 'article:nth-of-type(1)' > $P1_FILENAME
 if [ "$(cat $TMP_FILENAME | pup 'article:nth-of-type(2)' | wc -l)" -eq 0 ]
 then
     echo 'NOTE: part 2 not unlocked yet!'
 else
-    P2_FILENAME="$DIR"/$YEAR/d"$(printf "%.db.html" "$DAY")"
+    P2_FILENAME="$DIR"/$YEAR/d"$(printf "%02db.html" "$DAY")"
     cat $TMP_FILENAME | pup 'article:nth-of-type(2)' > $P2_FILENAME
 fi
 
