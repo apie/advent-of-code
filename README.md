@@ -21,3 +21,9 @@ This will generate a subdir with the new file.
 Then go to the subdir and run `../get_input.bash YEAR DAY` to download your input (you might need to add your session cookie to the file `cookie.txt` first).
 
 Test inputs can be written to files `d<DAY>.test.<#>` starting at 1, or you can write the test inputs in the python file as literals.
+
+## Problem download
+Run `../get_problem.bash YEAR DAY` to download the problem as clean html. This script uses `pup` to extract only the problem html.
+Install pup: `go install github.com/ericchiang/pup@latest`
+Info: https://github.com/ericchiang/pup
+

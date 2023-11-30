@@ -114,6 +114,7 @@ cookie.txt
 todo.txt
 output.txt
 
+#pascal
 *.o
 *.ppu
 program
