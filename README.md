@@ -12,6 +12,7 @@ https://adventofcode.com/
 - [2020](2020): Python
 - [2021](2021): Python/SQL
 - [2022](2022): Pascal
+- [2023](2023): Python
 
 ## Cookiecutter template for python based solutions
 How to use the cookiecutter template: `cookiecutter . -f -s dir_name=2022 day=1a`
