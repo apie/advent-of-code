@@ -7,7 +7,6 @@ F_NAME = splitext(abspath(__file__))[0][:-1]
 
 
 def findnumber(engine, x, y):
-    number = ""
     # gegeven xy coordinaat. zoek het volledige nummer dat daar ligt
     c = engine[y][x]
     if not c.isnumeric():
@@ -19,6 +18,7 @@ def findnumber(engine, x, y):
     x += 1
     c = engine[y][x]
     # loop over nummer
+    number = ""
     while c.isnumeric():
         number += c
         x += 1
@@ -31,17 +31,11 @@ def findnumber(engine, x, y):
 
 def answer(lines):
     answer = 0
-    print()
-    engine = []
-    for line in map(str.strip, lines):
-        engine.append(line)
+    engine = [line for line in map(str.strip, lines)]
 
-    ll = len(line)
-    el = len(engine)
-    for y in range(el):
-        for x in range(ll):
-            c = engine[y][x]
-            if c != "*":
+    for y in range(len(engine)):
+        for x in range(len(engine[0])):
+            if engine[y][x] != "*":
                 continue
             print("Gear position:", y, ",", x)
             numbers = set()
@@ -50,14 +44,11 @@ def answer(lines):
                     if dx == 0 and dy == 0:
                         continue
                     if n := findnumber(engine, x + dx, y + dy):
-                        # print('found number!! ', n)
                         numbers.add(n)
             if len(numbers) == 2:
                 print("Partnumbers:", numbers)
                 answer += numbers.pop() * numbers.pop()
-            numbers.clear()
 
-    print(answer)
     return answer
 
 
