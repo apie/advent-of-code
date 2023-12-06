@@ -22,11 +22,15 @@ def answer(lines):
         print('duration:', duration, 'ms')
         print('record distance:', distance, 'mm')
         n_wins = 0
-        for hold in range(duration+1):
+        # skip the first and the last since you dont move at all in those cases
+        for hold in range(1, duration-1):
             travelled = (duration-hold)*hold
 #            print(hold, travelled)
             if travelled > distance:
                 n_wins += 1
+            elif n_wins > 0:
+                # if no more wins, stop
+                break
         print(f'{n_wins=}')
         answer *= n_wins
     return answer
