@@ -19,7 +19,7 @@ def parse_map(line_iter):
             line = ''
     return sorted(parsed_map)
 
-def answer(lines):
+def parse_input(lines):
     linez = map(str.strip, lines)
     maps = []
     while True:
@@ -37,6 +37,10 @@ def answer(lines):
             print('map:', len(maps))
             maps.append(parsed_map)
             continue
+    return seeds, maps
+
+def answer(lines):
+    seeds, maps = parse_input(lines)
     print()
     answer = 99999999999999999
 
