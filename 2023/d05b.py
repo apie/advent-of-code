@@ -6,18 +6,30 @@ F_NAME = splitext(abspath(__file__))[0][:-1]
 import re
 from functools import lru_cache
 
+def parse_seeds(line):
+    seedsl = list(map(int, re.findall(r'\d+', line)))
+    seeds = []
+    while seedsl:
+        seedstart, seedlength = seedsl.pop(0), seedsl.pop(0)
+        seeds.append(seedstart)
+        seeds.append(seedstart + seedlength-1)
+    return seeds
+
 def parse_map(line_iter):
     parsed_map = []
     line = next(line_iter)
     while line:
         dest_range_start, source_range_start, range_length = map(int, line.split())
-        print(dest_range_start, source_range_start, range_length)
-        parsed_map.append((dest_range_start, source_range_start, range_length))
+#        print(dest_range_start, source_range_start, range_length)
+        dest_range_end = dest_range_start + range_length-1
+        source_range_end = source_range_start + range_length-1
+        print('source', source_range_start, '-', source_range_end, '-> dest', dest_range_start, '-', dest_range_end)
+        parsed_map.append((source_range_start, source_range_end, dest_range_start, dest_range_end))
         try:
             line = next(line_iter)
         except StopIteration:
             line = ''
-    return sorted(parsed_map)
+    return sorted(parsed_map, key=lambda x: x[2])
 
 def parse_input(lines):
     linez = map(str.strip, lines)
@@ -27,10 +39,13 @@ def parse_input(lines):
             line = next(linez)
         except StopIteration:
             break
-        print(line)
+#        print(line)
         if re.match(r'^seeds:', line):
-            seeds = list(map(int, re.findall(r'\d+', line)))
-            print(seeds)
+            seeds = parse_seeds(line)
+#            print(seeds)
+            print('seeds')
+            for i in range(0, len(seeds), 2):
+                print(seeds[i], '->', seeds[i+1])
             continue
         if re.match(r'.*map:$', line):
             parsed_map = parse_map(linez)
@@ -42,6 +57,7 @@ def parse_input(lines):
 def answer(lines):
     seeds, maps = parse_input(lines)
     print()
+    breakpoint()
     answer = 99999999999999999
 
     print('location we are looking for must be lower than lower bound of location numbers in the input:')
