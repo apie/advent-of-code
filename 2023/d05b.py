@@ -24,12 +24,19 @@ def parse_map(line_iter):
         dest_range_end = dest_range_start + range_length-1
         source_range_end = source_range_start + range_length-1
         print('source', source_range_start, '-', source_range_end, '-> dest', dest_range_start, '-', dest_range_end)
-        parsed_map.append((source_range_start, source_range_end, dest_range_start, dest_range_end))
+#        parsed_map.append((source_range_start, source_range_end, dest_range_start, dest_range_end))
+        def mappie(inp):
+            return 'hello'
+        parsed_map.append(mappie)
+        def mappie(inp):
+            return inp+1
+        parsed_map.append(mappie)
         try:
             line = next(line_iter)
         except StopIteration:
             line = ''
-    return sorted(parsed_map, key=lambda x: x[2])
+#    return sorted(parsed_map, key=lambda x: x[2])
+    return parsed_map
 
 def parse_input(lines):
     linez = map(str.strip, lines)
@@ -57,7 +64,38 @@ def parse_input(lines):
 def answer(lines):
     seeds, maps = parse_input(lines)
     print()
+    mi = seeds.pop(0)
+    ma = seeds.pop(0)
+    print(f'{mi=} {ma=}')
+    i = 0
+    while maps:
+        i += 1
+        print('map', i)
+        m = maps.pop(0)
+        print(m[0](123))
+        print(m[1](123))
+        breakpoint()
+        for mline in m:
+            source_start, source_end, dest_start, dest_end = mline
+            if source_start <= mi <= source_end and source_start <= ma <= source_end:
+                mi = mi - source_start + dest_start
+                ma = ma - source_start + dest_start
+                break
+            if source_start <= mi <= source_end and ma > source_end:
+                mi = mi - source_start + dest_start
+                ma = dest_end
+                break
+        print(f'{mi=} {ma=}')
+
     breakpoint()
+
+
+
+    return answer
+
+################# TODO
+
+
     answer = 99999999999999999
 
     print('location we are looking for must be lower than lower bound of location numbers in the input:')
