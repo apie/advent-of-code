@@ -1,0 +1,112 @@
+<article class="day-desc">
+ <h2 id="part2">
+  --- Part Two ---
+ </h2>
+ <p>
+  You notice a progress bar that jumps to 50% completion. Apparently, the door isn&#39;t yet satisfied, but it did emit a
+  <em class="star">
+   star
+  </em>
+  as encouragement. The instructions change:
+ </p>
+ <p>
+  Now, instead of considering the
+  <em>
+   next
+  </em>
+  digit, it wants you to consider the digit
+  <em>
+   halfway around
+  </em>
+  the circular list.  That is, if your list contains
+  <code>
+   10
+  </code>
+  items, only include a digit in your sum if the digit
+  <code>
+   10/2 = 5
+  </code>
+  steps forward matches it. Fortunately, your list has an even number of elements.
+ </p>
+ <p>
+  For example:
+ </p>
+ <ul>
+  <li>
+   <code>
+    1212
+   </code>
+   produces
+   <code>
+    6
+   </code>
+   : the list contains
+   <code>
+    4
+   </code>
+   items, and all four digits match the digit
+   <code>
+    2
+   </code>
+   items ahead.
+  </li>
+  <li>
+   <code>
+    1221
+   </code>
+   produces
+   <code>
+    0
+   </code>
+   , because every comparison is between a
+   <code>
+    1
+   </code>
+   and a
+   <code>
+    2
+   </code>
+   .
+  </li>
+  <li>
+   <code>
+    123425
+   </code>
+   produces
+   <code>
+    4
+   </code>
+   , because both
+   <code>
+    2
+   </code>
+   s match each other, but no other digit has a match.
+  </li>
+  <li>
+   <code>
+    123123
+   </code>
+   produces
+   <code>
+    12
+   </code>
+   .
+  </li>
+  <li>
+   <code>
+    12131415
+   </code>
+   produces
+   <code>
+    4
+   </code>
+   .
+  </li>
+ </ul>
+ <p>
+  <em>
+   What is the solution
+  </em>
+  to your new captcha?
+ </p>
+</article>
