@@ -2,7 +2,7 @@
 import pytest
 import fileinput
 from os.path import splitext, abspath
-F_NAME = splitext(abspath(__file__))[0][:-1]
+F_NAME = splitext(abspath(__file__))[0].rstrip('a').rstrip('b')
 
 def answer(lines):
     for line in map(str.strip, lines):
@@ -27,6 +27,6 @@ if __name__ == '__main__':
     filename = fileinput.input(F_NAME + '.input')
     ans = answer(filename)
     print('Answer:', ans)
-    duration = timeit.default_timer()-start
+    duration = timeit.default_timer() - start
     print(f'Execution time: {duration:.3f} s')
 
