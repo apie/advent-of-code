@@ -1,0 +1,65 @@
+<article class="day-desc">
+ <h2 id="part2">
+  --- Part Two ---
+ </h2>
+ <p>
+  As you try to work out what might be wrong, the reindeer tugs on your shirt and leads you to a nearby control panel. There, a collection of buttons lets you align the contraption so that the beam enters from
+  <em>
+   any edge tile
+  </em>
+  and heading away from that edge. (You can choose either of two directions for the beam if it starts on a corner; for instance, if the beam starts in the bottom-right corner, it can start heading either left or upward.)
+ </p>
+ <p>
+  So, the beam could start on any tile in the top row (heading downward), any tile in the bottom row (heading upward), any tile in the leftmost column (heading right), or any tile in the rightmost column (heading left). To produce lava, you need to find the configuration that
+  <em>
+   energizes as many tiles as possible
+  </em>
+  .
+ </p>
+ <p>
+  In the above example, this can be achieved by starting the beam in the fourth tile from the left in the top row:
+ </p>
+ <pre>
+  <code>
+   .|&lt;2&lt;\....
+|v-v\^....
+.v.v.|-&gt;&gt;&gt;
+.v.v.v^.|.
+.v.v.v^...
+.v.v.v^..\
+.v.v/2\\..
+&lt;-2-/vv|..
+.|&lt;&lt;&lt;2-|.\
+.v//.|.v..
+  </code>
+ </pre>
+ <p>
+  Using this configuration,
+  <code>
+   <em>
+    51
+   </em>
+  </code>
+  tiles are energized:
+ </p>
+ <pre>
+  <code>
+   .#####....
+.#.#.#....
+.#.#.#####
+.#.#.##...
+.#.#.##...
+.#.#.##...
+.#.#####..
+########..
+.#######..
+.#...#.#..
+  </code>
+ </pre>
+ <p>
+  Find the initial beam configuration that energizes the largest number of tiles;
+  <em>
+   how many tiles are energized in that configuration?
+  </em>
+ </p>
+</article>
