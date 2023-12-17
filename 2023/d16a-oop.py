@@ -3,7 +3,9 @@ import pytest
 import fileinput
 from io import StringIO
 from os.path import splitext, abspath
-F_NAME = splitext(abspath(__file__))[0].rstrip('a').rstrip('b')
+import re
+F_NAME = re.match(r'.+/d\d+', splitext(abspath(__file__))[0])[0]
+
 from dataclasses import dataclass
 
 def print_energized(energized_tiles, h, w):

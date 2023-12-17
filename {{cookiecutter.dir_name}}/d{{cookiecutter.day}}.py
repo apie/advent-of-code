@@ -2,7 +2,8 @@
 import pytest
 import fileinput
 from os.path import splitext, abspath
-F_NAME = splitext(abspath(__file__))[0].rstrip('a').rstrip('b')
+import re
+F_NAME = re.match(r'.+/d\d+', splitext(abspath(__file__))[0])[0]
 
 def answer(lines):
     for line in map(str.strip, lines):

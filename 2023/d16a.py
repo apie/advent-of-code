@@ -2,7 +2,8 @@
 import pytest
 import fileinput
 from os.path import splitext, abspath
-F_NAME = splitext(abspath(__file__))[0].rstrip('a').rstrip('b')
+import re
+F_NAME = re.match(r'.+/d\d+', splitext(abspath(__file__))[0])[0]
 
 def printenergized(energized, h, w):
     print('\033[2J\033[H')
