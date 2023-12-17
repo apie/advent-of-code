@@ -25,6 +25,9 @@ class Point:
     x: int
     y: int
 
+    def copy(self):
+        return Point(self.x, self.y)
+
 
 @dataclass
 class Walker:
@@ -65,6 +68,9 @@ class Grid:
         self.grid = list(map(str.strip, lines)) # [y][x]
 
     def tile(self, walker):
+        if walker.position.x < 0 or walker.position.y < 0:
+            return
+
         try:
             return self.grid[walker.position.y][walker.position.x]
         except IndexError:
@@ -97,9 +103,6 @@ def answer(lines):
             energized_tiles_direction.add((str(w.position), w.direction))
             w.move()
 
-        if w.position.x < 0 or w.position.y < 0:
-            return
-
         tile = cave.tile(w)
         if not tile:
             return
@@ -117,11 +120,11 @@ def answer(lines):
         elif tile == '|':
             if w.direction in ('l', 'r'):
                 w.direction = 'd'
-                movebeam(Walker(Point(w.position.x, w.position.y), 'u'))
+                movebeam(Walker(w.position.copy(), 'u'))
         elif tile == '-':
             if w.direction in ('u', 'd'):
                 w.direction = 'l'
-                movebeam(Walker(Point(w.position.x, w.position.y), 'r'))
+                movebeam(Walker(w.position.copy(), 'r'))
 
         movebeam(w)
 
