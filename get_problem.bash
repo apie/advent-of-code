@@ -15,7 +15,7 @@ COOKIE=$(cat "$DIR"/cookie.txt)
 YEAR=$1
 DAY=$(($2)) # Convert to int to strip leading zero
 TMP_FILENAME="/tmp/aoc-problem.html"
-curl "https://adventofcode.com/$YEAR/day/$DAY" -H "Cookie: session=$COOKIE" > $TMP_FILENAME
+curl "https://adventofcode.com/$YEAR/day/$DAY" -H "Cookie: $COOKIE" > $TMP_FILENAME
 if [ "$(cat $TMP_FILENAME)" == "Please log in to get problem (need to log in for part 2)." ]
 then
     echo 'Expired cookie! Log in again'
