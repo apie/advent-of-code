@@ -1,0 +1,130 @@
+<article class="day-desc">
+ <h2 id="part2">
+  --- Part Two ---
+ </h2>
+ <p>
+  While it appears you validated the passwords correctly, they don&#39;t seem to be what the Official Toboggan Corporate Authentication System is expecting.
+ </p>
+ <p>
+  The shopkeeper suddenly realizes that he just accidentally explained the password policy rules from his old job at the sled rental place down the street! The Official Toboggan Corporate Policy actually works a little differently.
+ </p>
+ <p>
+  Each policy actually describes two
+  <em>
+   positions in the password
+  </em>
+  , where
+  <code>
+   1
+  </code>
+  means the first character,
+  <code>
+   2
+  </code>
+  means the second character, and so on. (Be careful; Toboggan Corporate Policies have no concept of &#34;index zero&#34;!)
+  <em>
+   Exactly one of these positions
+  </em>
+  must contain the given letter. Other occurrences of the letter are irrelevant for the purposes of policy enforcement.
+ </p>
+ <p>
+  Given the same example list from above:
+ </p>
+ <ul>
+  <li>
+   <code>
+    1-3 a:
+    <em>
+     a
+    </em>
+    b
+    <em>
+     c
+    </em>
+    de
+   </code>
+   is
+   <em>
+    valid
+   </em>
+   : position
+   <code>
+    1
+   </code>
+   contains
+   <code>
+    a
+   </code>
+   and position
+   <code>
+    3
+   </code>
+   does not.
+  </li>
+  <li>
+   <code>
+    1-3 b:
+    <em>
+     c
+    </em>
+    d
+    <em>
+     e
+    </em>
+    fg
+   </code>
+   is
+   <em>
+    invalid
+   </em>
+   : neither position
+   <code>
+    1
+   </code>
+   nor position
+   <code>
+    3
+   </code>
+   contains
+   <code>
+    b
+   </code>
+   .
+  </li>
+  <li>
+   <code>
+    2-9 c: c
+    <em>
+     c
+    </em>
+    cccccc
+    <em>
+     c
+    </em>
+   </code>
+   is
+   <em>
+    invalid
+   </em>
+   : both position
+   <code>
+    2
+   </code>
+   and position
+   <code>
+    9
+   </code>
+   contain
+   <code>
+    c
+   </code>
+   .
+  </li>
+ </ul>
+ <p>
+  <em>
+   How many passwords are valid
+  </em>
+  according to the new interpretation of the policies?
+ </p>
+</article>
