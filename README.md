@@ -9,10 +9,11 @@ https://adventofcode.com/
 - [2017](2017): Pascal
 - [2018](2018): Python
 - [2019](2019): Python
-- [2020](2020): Python
+- [2020](2020): Typescript
 - [2021](2021): Python/SQL
 - [2022](2022): Pascal
 - [2023](2023): Python
+- [2024](2024): Typescript
 
 ## Cookiecutter template for python based solutions
 How to use the cookiecutter template: `cookiecutter . -f -s dir_name=2022 day=1a`
