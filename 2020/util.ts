@@ -4,16 +4,15 @@ export const sum = (arr: number[] | boolean[]): number =>
         0,
     );
 
-export const combinations = (
+export function* combinations (
     array1: number[],
     array2: number[],
-): number[][] => {
+): Generator<number[]>  {
     let it = 0;
-    const combinations = [];
     for (let index1 = 0; index1 < array1.length; index1++) {
         for (let index2 = 0; index2 < array2.length; index2++) {
             if (index1 !== index2) {
-                combinations[it] = [
+                yield [
                     array1[index1],
                     array2[index2],
                 ];
@@ -21,5 +20,4 @@ export const combinations = (
             }
         }
     }
-    return combinations;
 };

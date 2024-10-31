@@ -3,7 +3,7 @@ import { combinations } from "./util.ts";
 export const part1 = (lines: number[]): number => {
     const combs = combinations(lines, lines);
     const a = combs.find(([a, b]) => a + b == 2020);
-    if (!a) return 0;
+    if (!a) throw Error;
     return a[0] * a[1];
 };
 export const part2 = (lines: number[]): number => {
