@@ -8,6 +8,7 @@ if (!day) {
     Deno.exit(1);
 }
 
+const startTime = Date.now()
 const file = await Deno.open(`d${("0" + day).slice(-2)}.input`, { read: true });
 const buf = new Uint8Array(100000);
 file.read(buf);
@@ -29,3 +30,4 @@ switch (day) {
 }
 console.log("DAY", day, "solution part1:", answers[0]);
 console.log("DAY", day, "solution part2:", answers[1]);
+console.log('Solution took', Date.now() - startTime, 'ms')

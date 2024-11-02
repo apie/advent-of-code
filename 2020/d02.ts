@@ -1,4 +1,3 @@
-import { sum } from "./util.ts";
 function parsePassword(password: string): RegExpMatchArray {
     // console.log(password);
     const parsedPassword = password.match(
@@ -53,17 +52,15 @@ export function solution(
     ) => boolean,
 ): number {
     const passwords = input.trim().split("\n");
-    return sum(
-        passwords.filter((pw) => pw[0].match(/\d/)).map((pw) => {
-            const parsedPassword = parsePassword(pw);
-            if (!parsedPassword.groups) return false;
-            const posOne = Number(parsedPassword.groups.from);
-            const posTwo = Number(parsedPassword.groups.to);
-            const letter = parsedPassword.groups.letter;
-            const word = parsedPassword.groups.hay;
-            return checkPasswordFunction(word, letter, posOne, posTwo);
-        }),
-    );
+    return passwords.filter((pw) => pw[0].match(/\d/)).map((pw) => {
+        const parsedPassword = parsePassword(pw);
+        if (!parsedPassword.groups) return false;
+        const posOne = Number(parsedPassword.groups.from);
+        const posTwo = Number(parsedPassword.groups.to);
+        const letter = parsedPassword.groups.letter;
+        const word = parsedPassword.groups.hay;
+        return checkPasswordFunction(word, letter, posOne, posTwo);
+    }).filter((pwOK) => pwOK === true).length;
 }
 
 export const part1 = (input: string): number =>

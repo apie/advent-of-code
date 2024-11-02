@@ -1,18 +1,18 @@
-import { combinations2, combinations3, prod, sum } from "./util.ts";
+import { combinations2, combinations3} from "./util.ts";
 
 export const solution = (combs: Generator<number[]>): number => {
-    const a = combs.find((c) => sum(c) == 2020);
+    const a = combs.find((c) => c.sum() == 2020);
     if (!a) throw Error;
-    return prod(a);
+    return a.prod();
 };
 
 export const part1 = (lines: number[]): number => {
     const combs = combinations2(lines, lines);
-    return solution(combs)
+    return solution(combs);
 };
 export const part2 = (lines: number[]): number => {
     const combs = combinations3(lines, lines, lines);
-    return solution(combs)
+    return solution(combs);
 };
 
 function d01(input: string): number[] {

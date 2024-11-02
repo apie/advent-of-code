@@ -1,14 +1,27 @@
-export const sum = (arr: number[] | boolean[]): number =>
-    arr.reduce(
-        (total: number, item: number | boolean) => total += Number(item),
-        0,
-    );
-
-export const prod = (arr: number[]): number =>
-    arr.reduce(
-        (total: number, item: number) => total *= item,
-        arr.pop() || 0,
-    );
+Object.defineProperty(Array.prototype, "sum", {
+    enumerable: false,
+    value: function () {
+        return this.reduce(
+            (total: number, item: number | boolean) => total += Number(item),
+            0,
+        );
+    },
+});
+Object.defineProperty(Array.prototype, "prod", {
+    enumerable: false,
+    value: function () {
+        return this.reduce(
+            (total: number, item: number | boolean) => total *= Number(item),
+            1,
+        );
+    },
+});
+declare global {
+    interface Array<T> {
+        sum(): number;
+        prod(): number;
+    }
+}
 
 export function* combinations2(
     array1: number[],
