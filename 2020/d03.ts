@@ -1,8 +1,11 @@
 import "./util.ts";
 
+type Slope = { x: number; y: number };
+type Position = { x: number; y: number };
+
 const printMapAndCountTrees = (
     lines: string[],
-    positions: { x: number; y: number }[],
+    positions: Position[],
 ): number => {
     const mapWidth = positions[positions.length - 1].x;
     let numTreesEncountered = 0;
@@ -31,12 +34,12 @@ const printMapAndCountTrees = (
     return numTreesEncountered;
 };
 const traverseMap = (
-    slope: { x: number; y: number },
+    slope: Slope,
     maxLines: number,
-): { x: number; y: number }[] => {
-    const startPos = { x: 0, y: 0 };
+): Position[] => {
+    const startPos: Position = { x: 0, y: 0 };
     const pos = startPos;
-    const positions: { x: number; y: number }[] = [];
+    const positions: Position[] = [];
     while (pos.y < maxLines - 1) {
         pos.x += slope.x;
         pos.y += slope.y;
@@ -46,7 +49,7 @@ const traverseMap = (
 };
 const getTreesOnMap = (
     cave: string[],
-    slope: { x: number; y: number },
+    slope: Slope,
 ): number => {
     console.log(`-------SLOPE: ${slope.x} ${slope.y} -----------`);
     const positions = traverseMap(slope, cave.length);
