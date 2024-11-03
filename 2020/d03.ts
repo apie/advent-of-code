@@ -1,6 +1,6 @@
 import "./util.ts";
 
-const printMap2 = (
+const printMapAndCountTrees = (
     lines: string[],
     positions: { x: number; y: number }[],
 ): number => {
@@ -30,19 +30,6 @@ const printMap2 = (
     console.log();
     return numTreesEncountered;
 };
-export const part1 = (lines: string[]): number => {
-    const startPos = { x: 0, y: 0 };
-    const pos = startPos;
-    const positions: { x: number; y: number }[] = [];
-    while (pos.y < lines.length - 1) {
-        pos.x += 3;
-        pos.y += 1;
-        positions[positions.length] = { ...pos };
-        // printMap(lines, pos);
-    }
-    console.log(positions);
-    return printMap2(lines, positions);
-};
 const traverseMap = (
     slope: { x: number; y: number },
     maxLines: number,
@@ -54,26 +41,29 @@ const traverseMap = (
         pos.x += slope.x;
         pos.y += slope.y;
         positions[positions.length] = { ...pos };
-        // printMap(lines, pos);
     }
-    // console.log(positions);
     return positions;
 };
+const getTreesOnMap = (
+    cave: string[],
+    slope: { x: number; y: number },
+): number => {
+    console.log(`-------SLOPE: ${slope.x} ${slope.y} -----------`);
+    const positions = traverseMap(slope, cave.length);
+    return printMapAndCountTrees(cave, positions);
+};
+
+export const part1 = (lines: string[]): number => {
+    return getTreesOnMap(lines, { x: 3, y: 1 });
+};
 export const part2 = (lines: string[]): number => {
-    const slopes = [
+    return [
         { x: 1, y: 1 },
         { x: 3, y: 1 },
         { x: 5, y: 1 },
         { x: 7, y: 1 },
         { x: 1, y: 2 },
-    ];
-
-    return slopes.map((slope) => {
-        console.log(`-------SLOPE: ${slope.x} ${slope.y} -----------`);
-        const positions = traverseMap(slope, lines.length);
-        // console.log(positions);
-        return printMap2(lines, positions);
-    }).prod();
+    ].map((slope) => getTreesOnMap(lines, slope)).prod();
 };
 
 function d03(input: string): number[] {
