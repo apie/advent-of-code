@@ -1,28 +1,34 @@
+import "./util.ts";
+
 const printMap2 = (
     lines: string[],
     positions: { x: number; y: number }[],
 ): number => {
-    let numTreesEncountered = 0
+    const mapWidth = positions[positions.length - 1].x;
+    let numTreesEncountered = 0;
     lines.forEach((line, y) => {
-        let lineArr = line.split("");
-        const pos = positions[y-1];
-        // console.log(pos)
+        // consider first pos
+        const pos = positions[0];
         if (!pos) return;
-        while (positions[positions.length-1].x > lineArr.length) {
+        let lineArr = line.split("");
+        while (mapWidth > lineArr.length) {
             lineArr = lineArr.concat(lineArr);
         }
         if (pos.y === y) {
+            // arrived at the row of the first pos, so consider it handled
+            positions.shift();
             if (lineArr[pos.x] === "#") {
                 lineArr[pos.x] = "X";
                 numTreesEncountered += 1;
             } else {
                 lineArr[pos.x] = "O";
             }
-            console.log(lineArr.join(""));
-        } else console.log(lineArr.join(""));
+        }
+        // just print the line
+        console.log(lineArr.join(""));
     });
     console.log();
-    return numTreesEncountered
+    return numTreesEncountered;
 };
 export const part1 = (lines: string[]): number => {
     const startPos = { x: 0, y: 0 };
@@ -37,8 +43,37 @@ export const part1 = (lines: string[]): number => {
     console.log(positions);
     return printMap2(lines, positions);
 };
+const traverseMap = (
+    slope: { x: number; y: number },
+    maxLines: number,
+): { x: number; y: number }[] => {
+    const startPos = { x: 0, y: 0 };
+    const pos = startPos;
+    const positions: { x: number; y: number }[] = [];
+    while (pos.y < maxLines - 1) {
+        pos.x += slope.x;
+        pos.y += slope.y;
+        positions[positions.length] = { ...pos };
+        // printMap(lines, pos);
+    }
+    // console.log(positions);
+    return positions;
+};
 export const part2 = (lines: string[]): number => {
-    return 0;
+    const slopes = [
+        { x: 1, y: 1 },
+        { x: 3, y: 1 },
+        { x: 5, y: 1 },
+        { x: 7, y: 1 },
+        { x: 1, y: 2 },
+    ];
+
+    return slopes.map((slope) => {
+        console.log(`-------SLOPE: ${slope.x} ${slope.y} -----------`);
+        const positions = traverseMap(slope, lines.length);
+        // console.log(positions);
+        return printMap2(lines, positions);
+    }).prod();
 };
 
 function d03(input: string): number[] {
