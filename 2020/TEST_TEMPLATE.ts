@@ -1,6 +1,6 @@
 import { assertEquals } from "jsr:@std/assert";
 
-import { part1, part2 } from "./d01.ts";
+import { part1, part2 } from "./d_DAY_.ts";
 
 const testinput = `
 `.trim().split("\n").map((line) => Number(line));

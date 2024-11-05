@@ -5,7 +5,7 @@ export const part2 = (lines: number[]): number => {
     return 0;
 };
 
-function d01(input: string): number[] {
+function d_DAY_(input: string): number[] {
     const lines = input.trim().split("\n").filter((line) => line.match(/^\d/))
         .map((line) => Number(line));
     return [
@@ -14,4 +14,4 @@ function d01(input: string): number[] {
     ];
 }
 
-export default d01;
+export default d_DAY_;
