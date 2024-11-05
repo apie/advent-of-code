@@ -9,59 +9,43 @@ type Passport = {
   pid: number;
   cid?: number;
 };
+
 const passportFields = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
 const validateFieldValue = (
   fieldName: keyof Passport,
   fieldValue: string | number,
 ): boolean => {
   //console.log(fieldName);
-  let val = -1;
   switch (fieldName) {
     case "byr":
-      val = Number(fieldValue);
-      if (val < 1920) return false;
-      if (val > 2002) return false;
-      break;
+      return Number(fieldValue).between(1920, 2002);
     case "iyr":
-      val = Number(fieldValue);
-      if (val < 2010) return false;
-      if (val > 2020) return false;
-      break;
+      return Number(fieldValue).between(2010, 2020);
     case "eyr":
-      val = Number(fieldValue);
-      if (val < 2020) return false;
-      if (val > 2030) return false;
-      break;
+      return Number(fieldValue).between(2020, 2030);
     case "hgt":
       if (typeof fieldValue !== "string") return false;
       if (fieldValue.match(/^\d{3}cm$/)) {
-        const hgtCm = Number(fieldValue.match(/^\d{3}/));
-        if (hgtCm < 150) return false;
-        if (hgtCm > 193) return false;
+        return Number(fieldValue.match(/^\d{3}/)).between(150, 193);
       } else if (fieldValue.match(/^\d{2}in$/)) {
-        const hgtIn = Number(fieldValue.match(/^\d{2}/));
-        if (hgtIn < 59) return false;
-        if (hgtIn > 76) return false;
+        return Number(fieldValue.match(/^\d{2}/)).between(59, 76);
       } else return false;
-      break;
     case "hcl":
       if (typeof fieldValue !== "string") return false;
-      if (!fieldValue.match(/^#[0-9a-f]{6}$/)) return false;
-      break;
+      return !!fieldValue.match(/^#[0-9a-f]{6}$/);
     case "ecl":
       if (typeof fieldValue !== "string") return false;
-      if (
-        !["amb", "blu", "brn", "gry", "grn", "hzl", "oth"].includes(fieldValue)
-      ) return false;
-      break;
+      return ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"].includes(
+        fieldValue,
+      );
     case "pid":
       if (typeof fieldValue !== "string") return false;
-      if (!fieldValue.match(/^[0-9]{9}$/)) return false;
-      break;
+      return !!fieldValue.match(/^[0-9]{9}$/);
+    default:
+      throw Error("Unknown field");
   }
-  //console.log(fieldName, true);
-  return true;
 };
+
 const validatePassport = (
   passport: Passport,
   shouldValidateFieldValue: boolean,
@@ -81,6 +65,7 @@ const validatePassport = (
   }
   return valid;
 };
+
 const buildPassport = (passportString: string): Passport => {
   const pairs = passportString.split("\n").map((passportLine) =>
     passportLine.split(" ")

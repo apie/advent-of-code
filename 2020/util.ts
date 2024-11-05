@@ -16,10 +16,17 @@ Object.defineProperty(Array.prototype, "prod", {
         );
     },
 });
+Number.prototype.between = function (a, b) {
+    return this >= a && this <= b;
+};
+
 declare global {
     interface Array<T> {
         sum(): number;
         prod(): number;
+    }
+    interface Number {
+        between(a: Number, b: Number): boolean;
     }
 }
 
