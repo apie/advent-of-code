@@ -64,3 +64,14 @@ iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719
     4,
   );
 });
+
+Deno.test("part 2 3", () => {
+  assertEquals(
+    part2(
+      `
+pid:087499704 hgt:774in ecl:grn iyr:2012 eyr:2030 byr:1980 hcl:#623a2f
+`.trim().split("\n\n"),
+    ),
+    0,
+  );
+});
