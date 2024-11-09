@@ -16,6 +16,15 @@ Object.defineProperty(Array.prototype, "prod", {
         );
     },
 });
+Object.defineProperty(Array.prototype, "max", {
+    enumerable: false,
+    value: function () {
+        return this.reduce(
+            (highest: number, item: number) => item > highest ? item : highest,
+            this.shift(),
+        );
+    },
+});
 Number.prototype.between = function (a, b) {
     return this >= a && this <= b;
 };
@@ -24,6 +33,7 @@ declare global {
     interface Array<T> {
         sum(): number;
         prod(): number;
+        max(): number;
     }
     interface Number {
         between(a: Number, b: Number): boolean;
