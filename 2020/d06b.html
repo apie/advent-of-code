@@ -1,0 +1,148 @@
+<article class="day-desc">
+ <h2 id="part2">
+  --- Part Two ---
+ </h2>
+ <p>
+  As you finish the last group&#39;s customs declaration, you notice that
+  <span title="Don&#39;t worry, nobody ever misreads just one word in real life.">
+   you misread one word
+  </span>
+  in the instructions:
+ </p>
+ <p>
+  You don&#39;t need to identify the questions to which
+  <em>
+   anyone
+  </em>
+  answered &#34;yes&#34;; you need to identify the questions to which
+  <em>
+   everyone
+  </em>
+  answered &#34;yes&#34;!
+ </p>
+ <p>
+  Using the same  example as above:
+ </p>
+ <pre>
+  <code>
+   abc
+
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b
+  </code>
+ </pre>
+ <p>
+  This list represents answers from five groups:
+ </p>
+ <ul>
+  <li>
+   In the first group, everyone (all 1 person) answered &#34;yes&#34; to
+   <em>
+    <code>
+     3
+    </code>
+   </em>
+   questions:
+   <code>
+    a
+   </code>
+   ,
+   <code>
+    b
+   </code>
+   , and
+   <code>
+    c
+   </code>
+   .
+  </li>
+  <li>
+   In the second group, there is
+   <em>
+    no
+   </em>
+   question to which everyone answered &#34;yes&#34;.
+  </li>
+  <li>
+   In the third group, everyone answered yes to only
+   <em>
+    <code>
+     1
+    </code>
+   </em>
+   question,
+   <code>
+    a
+   </code>
+   . Since some people did not answer &#34;yes&#34; to
+   <code>
+    b
+   </code>
+   or
+   <code>
+    c
+   </code>
+   , they don&#39;t count.
+  </li>
+  <li>
+   In the fourth group, everyone answered yes to only
+   <em>
+    <code>
+     1
+    </code>
+   </em>
+   question,
+   <code>
+    a
+   </code>
+   .
+  </li>
+  <li>
+   In the fifth group, everyone (all 1 person) answered &#34;yes&#34; to
+   <em>
+    <code>
+     1
+    </code>
+   </em>
+   question,
+   <code>
+    b
+   </code>
+   .
+  </li>
+ </ul>
+ <p>
+  In this example, the sum of these counts is
+  <code>
+   3 + 0 + 1 + 1 + 1
+  </code>
+  =
+  <em>
+   <code>
+    6
+   </code>
+  </em>
+  .
+ </p>
+ <p>
+  For each group, count the number of questions to which
+  <em>
+   everyone
+  </em>
+  answered &#34;yes&#34;.
+  <em>
+   What is the sum of those counts?
+  </em>
+ </p>
+</article>
