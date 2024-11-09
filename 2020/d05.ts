@@ -46,8 +46,27 @@ export const getseatID = (boardingPass: string): number => {
 export const part1 = (lines: string[]): number => {
     return lines.map((line) => getseatID(line)).max();
 };
+
+const findMissingSeatID = (lines: string[]): number => {
+    const seatIds = lines.map((line) => {
+        return getseatID(line);
+    }).sort();
+    const seatSet = new Set(seatIds);
+    let mySeatArr = seatIds.filter((sId) => {
+        if (seatSet.has(sId) && seatSet.has(sId - 1) && seatSet.has(sId + 1)) {
+            return;
+        }
+        return sId;
+    });
+    mySeatArr = mySeatArr.filter((sId) => {
+        return mySeatArr.includes(sId - 2);
+    });
+    assert(mySeatArr.length === 1);
+    const mySeat = mySeatArr[0] - 1;
+    return mySeat;
+};
 export const part2 = (lines: string[]): number => {
-    return 0;
+    return findMissingSeatID(lines);
 };
 
 function d05(input: string): number[] {

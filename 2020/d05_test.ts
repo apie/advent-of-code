@@ -1,6 +1,6 @@
 import { assertEquals } from "jsr:@std/assert";
 
-import { getseatID, part1, part2 } from "./d05.ts";
+import { getseatID, part1 } from "./d05.ts";
 
 Deno.test("part 1 getseatID 1", () => {
   const testinput = `
@@ -31,10 +31,7 @@ FBFBBFFRLR
 BFFFBBFRRR
 FFFBBBFRRR
 BBFFBBFRLL
-`.trim().split("\n")
+`.trim().split("\n");
 Deno.test("part 1", () => {
   assertEquals(part1(testinput), 820);
 });
-// Deno.test("part 2", () => {
-//   assertEquals(part2(testinput), -1);
-// });
