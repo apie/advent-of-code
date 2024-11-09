@@ -1,13 +1,12 @@
-export const part1 = (lines: number[]): number => {
+export const part1 = (lines: string[]): number => {
     return 0;
 };
-export const part2 = (lines: number[]): number => {
+export const part2 = (lines: string[]): number => {
     return 0;
 };
 
 function d_DAY_(input: string): number[] {
-    const lines = input.trim().split("\n").filter((line) => line.match(/^\d/))
-        .map((line) => Number(line));
+    const lines = input.trim().split("\n");
     return [
         part1(lines),
         part2(lines),
