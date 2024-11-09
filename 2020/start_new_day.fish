@@ -19,4 +19,6 @@ case \"$DAY\":\n\
         answers = d$PADDAY\(text\);\n\
         break;\n\
     \1/" run.ts -i
-git add $DAYFILE $DAYTESTFILE run.ts
+../get_problem.bash (basename (pwd)) $DAY
+../get_input.bash (basename (pwd)) $DAY
+git add $DAYFILE $DAYTESTFILE run.ts d"$PADDAY"a.html
