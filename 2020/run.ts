@@ -3,6 +3,7 @@ import d02 from "./d02.ts";
 import d03 from "./d03.ts";
 import d04 from "./d04.ts";
 import d05 from "./d05.ts";
+import d06 from "./d06.ts";
 
 const [day] = Deno.args;
 if (!day) {
@@ -11,10 +12,8 @@ if (!day) {
 }
 
 const startTime = Date.now();
-const file = await Deno.open(`d${("0" + day).slice(-2)}.input`, { read: true });
-const buf = new Uint8Array(100000);
-file.read(buf);
-const text = new TextDecoder().decode(buf);
+const fileName = `d${("0" + day).slice(-2)}.input`;
+const text = await Deno.readTextFile(fileName);
 let answers;
 switch (day) {
     case "1":
@@ -30,8 +29,11 @@ switch (day) {
         answers = d04(text);
         break;
     case "5":
-       answers = d05(text);
-       break;
+        answers = d05(text);
+        break;
+    case "6":
+        answers = d06(text);
+        break;
     default:
         console.error("Unknown day");
         Deno.exit(1);

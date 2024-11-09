@@ -16,7 +16,7 @@ grep "import d$PADDAY" run.ts -q; or sed "s/\(import d$PADPREVDAY from \".\/d$PA
 import d$PADDAY from \".\/d$PADDAY.ts\";/
 s/\(default:\)/\
 case \"$DAY\":\n\
-       answers = d$PADDAY\(text\);\n\
-       break;\n\
+        answers = d$PADDAY\(text\);\n\
+        break;\n\
     \1/" run.ts -i
 git add $DAYFILE $DAYTESTFILE run.ts
