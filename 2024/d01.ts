@@ -1,31 +1,25 @@
 import { assert } from "jsr:@std/assert/assert";
 import "./util.ts";
 
-export const part1 = (lines: string[]): number => {
-    // console.log(lines)
-    const first = lines.map((line) => Number(line.split("   ")[0])).sort();
-    const second = lines.map((line) => Number(line.split("   ")[1])).sort();
-    console.log(first);
-    console.log(second);
-    assert(first.length === second.length);
-    const ans = first.map((fitem, i) => [fitem, second[i]]).map((
-        [pairl, pairr],
-    ) => Math.abs(pairl - pairr)).sum();
-    console.log(ans);
-    return ans;
-};
-export const part2 = (lines: string[]): number => {
+const getLists = (lines: string[]): { first: number[]; second: number[] } => {
     const first = lines.map((line) => Number(line.split("   ")[0]));
     const second = lines.map((line) => Number(line.split("   ")[1]));
-    console.log(first);
-    console.log(second);
     assert(first.length === second.length);
+    return { "first": first, "second": second };
+};
+export const part1 = (lines: string[]): number => {
+    let { first, second } = getLists(lines);
+    first = first.sort();
+    second = second.sort();
+    return first.map((fitem, i) => [fitem, second[i]]).map((
+        [pairl, pairr],
+    ) => Math.abs(pairl - pairr)).sum();
+};
+export const part2 = (lines: string[]): number => {
+    const { first, second } = getLists(lines);
     const countz = first.map((fitem) => [fitem, second.count(fitem)]);
-    console.log(countz);
     const scores = countz.map(([num, num_appear]) => num * num_appear);
-    console.log(scores);
-    const ans = scores.sum();
-    return ans;
+    return scores.sum();
 };
 
 function d01(input: string): number[] {
