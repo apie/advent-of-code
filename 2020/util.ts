@@ -27,9 +27,10 @@ Object.defineProperty(Array.prototype, "max", {
 });
 Object.defineProperty(Array.prototype, "count", {
     enumerable: false,
-    value: function (c: string) {
+    value: function (c: string | number) {
         return this.reduce(
-            (total: number, item: string) => item === c ? total += 1 : total,
+            (total: number, item: string | number) =>
+                item === c ? total += 1 : total,
             0,
         );
     },
@@ -43,7 +44,7 @@ declare global {
         sum(): number;
         prod(): number;
         max(): number;
-        count(c: string): number;
+        count(c: string | number): number;
     }
     interface Number {
         between(a: Number, b: Number): boolean;
