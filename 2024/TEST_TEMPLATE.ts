@@ -1,1 +1,1 @@
-../2020/TEST_TEMPLATE.ts
+../utils/typescript/TEST_TEMPLATE.ts

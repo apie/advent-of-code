@@ -1,1 +1,1 @@
-../2020/TEMPLATE.ts
+../utils/typescript/TEMPLATE.ts

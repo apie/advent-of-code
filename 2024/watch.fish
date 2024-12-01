@@ -1,1 +1,1 @@
-../2020/watch.fish
+../utils/watch.fish

@@ -1,1 +1,1 @@
-../2020/start_new_day.fish
+../utils/typescript/start_new_day.fish

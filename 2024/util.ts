@@ -1,1 +1,1 @@
-../2020/util.ts
+../utils/typescript/util.ts

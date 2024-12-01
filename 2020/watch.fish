@@ -1,5 +1,1 @@
-#!/usr/bin/fish
-while inotifywait -e close_write .
-    $argv
-end
-
+../utils/watch.fish
