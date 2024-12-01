@@ -122,3 +122,4 @@ program
 
 *.test.*
 .idea/
+RUNNING_ON
