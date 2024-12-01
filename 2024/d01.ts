@@ -15,7 +15,17 @@ export const part1 = (lines: string[]): number => {
     return ans;
 };
 export const part2 = (lines: string[]): number => {
-    return 0;
+    const first = lines.map((line) => Number(line.split("   ")[0]));
+    const second = lines.map((line) => Number(line.split("   ")[1]));
+    console.log(first);
+    console.log(second);
+    assert(first.length === second.length);
+    const countz = first.map((fitem) => [fitem, second.count(fitem)]);
+    console.log(countz);
+    const scores = countz.map(([num, num_appear]) => num * num_appear);
+    console.log(scores);
+    const ans = scores.sum();
+    return ans;
 };
 
 function d01(input: string): number[] {
