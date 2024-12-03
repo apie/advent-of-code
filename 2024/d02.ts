@@ -26,11 +26,11 @@ export const part1 = (lines: string[]): number => {
     ).count(true);
 };
 const isReportSafeWhenRemovingASingleLevel = (report: Treport): boolean =>
-    report.reduce((found, _level, i) => {
-        const myreport = [...report];
-        myreport.splice(i, 1);
-        return found || isReportSafe(myreport);
-    }, false);
+    report.reduce(
+        (found, _level, i) =>
+            found || isReportSafe(report.filter((_level, j) => j !== i)),
+        false,
+    );
 
 export const part2 = (lines: string[]): number => {
     // Now, the same rules apply as before, except if removing a single level from an unsafe report would make it safe, the report instead counts as safe.
