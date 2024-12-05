@@ -1,4 +1,5 @@
 import "./util.ts";
+import { p } from "./util.ts";
 
 export const part1 = (lines: string[]): number => {
     return 0;

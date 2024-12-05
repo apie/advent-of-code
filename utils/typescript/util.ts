@@ -90,3 +90,8 @@ export function* combinations3(
         }
     }
 }
+
+// deno-lint-ignore no-explicit-any
+export function p(...t: any[]) {
+    console.debug(...t);
+}
