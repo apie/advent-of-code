@@ -21,6 +21,8 @@ const pageUpdateValid = (
 ): boolean => pageUpdate.join(",") === [...pageUpdate].sort(sorter).join(",");
 
 export const part1 = (lines: string[]): number => {
+    // Find correctly ordered
+    // Sum up the middle updates
     const [rulesStr, pagesStr] = lines;
     rules = rulesStr.trim().split("\n").map((rule) => {
         const pageNr = rule.split("|").map((n) => Number(n));
@@ -46,7 +48,15 @@ export const part1 = (lines: string[]): number => {
     ) => getMiddlePageNumber(pageUpdate)).sum();
 };
 export const part2 = (lines: string[]): number => {
-    return 0;
+    // Find incorrectly ordered
+    // Order them
+    // Sum up the middle updates
+    const [_rulesStr, pagesStr] = lines;
+    return pagesStr.split("\n").map((pageUpdateStr) =>
+        pageUpdateStr.split(",").map((page) => Number(page))
+    ).filter((pageUpdate) => !pageUpdateValid(pageUpdate)).map((
+        pageUpdate,
+    ) => getMiddlePageNumber(pageUpdate.sort(sorter))).sum();
 };
 
 function d05(input: string): number[] {
