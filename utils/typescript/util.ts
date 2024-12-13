@@ -1,3 +1,5 @@
+import { assert } from "jsr:@std/assert/assert";
+
 Object.defineProperty(Array.prototype, "sum", {
     enumerable: false,
     value: function () {
@@ -94,4 +96,73 @@ export function* combinations3(
 // deno-lint-ignore no-explicit-any
 export function p(...t: any[]) {
     console.debug(...t);
+}
+
+export class Grid {
+    g: string[];
+    constructor(g: string[]) {
+        this.g = g;
+    }
+    size(): number[] {
+        return [this.g.length, this.g[0].length];
+    }
+    lines() {
+        return this.g;
+    }
+    _dbg_print() {
+        p("_print");
+        const [xlen, ylen] = this.size();
+        for (let x = 0; x < xlen; x++) {
+            let row = "";
+            for (let y = 0; y < ylen; y++) {
+                row += `${x},${y} `;
+            }
+            p(row);
+        }
+        p();
+    }
+    _dbg_printv() {
+        p("_printv");
+        const [xlen, ylen] = this.size();
+        let h = " ";
+        for (let y = 0; y < ylen; y++) {
+            h += " " + y;
+        }
+        p(h);
+        for (let x = 0; x < xlen; x++) {
+            let row = x + "";
+            for (let y = 0; y < ylen; y++) {
+                row += " " + this.g[x][y];
+            }
+            p(row);
+        }
+        p();
+    }
+    _dbg_printdiag(counter: number) {
+        p("_printdiag");
+        const [xlen, ylen] = this.size();
+        assert(counter < xlen, "Counter out of range");
+        assert(counter > -ylen, "Counter out of range");
+        for (let x = 0; x < xlen; x++) {
+            let row = "";
+            for (let y = 0; y < ylen; y++) {
+                if (x - y === counter) row += `${x},${y} `;
+                else row += " ,  ";
+            }
+            p(row);
+        }
+        p();
+    }
+    _dbg_printrotated() {
+        p("_printrotated");
+        const [xlen, ylen] = this.size();
+        for (let x = 0; x < xlen; x++) {
+            let row = "";
+            for (let y = 0; y < ylen; y++) {
+                row += `${ylen - 1 - y},${x} `;
+            }
+            p(row);
+        }
+        p();
+    }
 }
