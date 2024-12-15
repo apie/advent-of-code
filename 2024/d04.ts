@@ -1,6 +1,6 @@
 import { assert } from "jsr:@std/assert/assert";
 import "./util.ts";
-import { Grid, p } from "./util.ts";
+import { Grid, p, Point } from "./util.ts";
 
 class WordGrid extends Grid {
     _getrotated(): string[] {
@@ -62,14 +62,34 @@ export const part1 = (lines: string[]): number => {
     p(xmascounts, "totaal:", xmascounts.sum());
     return xmascounts.sum();
 };
+
+let seen = new Set();
+let numseen = 0;
 const countXMASpt2 = (lines: string[]): number => {
     // p("lines", lines);
     return lines.map((line, i) => {
-        return Array.from(line.matchAll(/M.S/g)).map((m) => {
-            const found = lines[i + 1]?.[m.index + 1] === "A" &&
-                lines[i + 2]?.[m.index] === "M" &&
-                lines[i + 2]?.[m.index + 2] === "S";
-            if (found) console.log("match found (A) at", i + 1, m.index + 1);
+        return Array.from(line.matchAll(/A/g)).map((m) => {
+            // p('a found',i, m.index)
+            const found = lines[i - 1]?.[m.index - 1] === "M" &&
+                lines[i - 1]?.[m.index + 1] === "S" &&
+                lines[i + 1]?.[m.index - 1] === "M";
+            lines[i + 1]?.[m.index + 1] === "S";
+            if (found) {
+                numseen++;
+                p("match found (A) at", i, m.index);
+                const ap = new Point(i, m.index);
+                const mp = new Point(i - 1, m.index - 1);
+                const sp = new Point(i - 1, m.index + 1);
+                const mp2 = new Point(i + 1, m.index - 1);
+                const sp2 = new Point(i + 1, m.index + 1);
+                const points = [ap, mp, sp, mp2, sp2];
+                const g = new Grid(lines);
+                g._dbg_printv(points);
+                p(seen);
+                // IDX is veranderd door het rotaten!
+                if (seen.has(`${i},${m.index}`)) return false;
+                seen.add(`${i},${m.index}`);
+            }
             return found;
         }).sum();
     }).filter((
@@ -79,18 +99,22 @@ const countXMASpt2 = (lines: string[]): number => {
     ) => !Number.isNaN(result)).sum();
 };
 export const part2 = (lines: string[]): number => {
-    const gr = new Grid(lines);
+    // p(Array.from('MMSS'.matchAll(/A/g)))
+    // return 0
+    const gr = new WordGrid(lines);
 
-    const myg = gr.g;
-    [...Array(4).keys()].forEach((_direction) => gr.rotate90());
-    assert(myg.join(".") === gr.g.join("."), "rotated 360 should be equal");
+    // const myg = gr.g;
+    // [...Array(4).keys()].forEach((_direction) => gr.rotate90());
+    // assert(myg.join(".") === gr.g.join("."), "rotated 360 should be equal");
 
     const xmascounts = [...Array(4).keys()].map((_direction) => {
         gr.rotate90();
         gr._dbg_printv();
         return countXMASpt2(gr.lines());
     });
-    p(xmascounts, "totaal:", xmascounts.sum());
+    p("\n\n-->", xmascounts, "totaal:", xmascounts.sum());
+    p(numseen);
+    return numseen;
     return xmascounts.sum();
 };
 

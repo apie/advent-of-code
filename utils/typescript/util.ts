@@ -98,6 +98,15 @@ export function p(...t: any[]) {
     console.debug(...t);
 }
 
+export class Point {
+    readonly x: number;
+    readonly y: number;
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
 export class Grid {
     g: string[];
     constructor(g: string[]) {
@@ -121,7 +130,7 @@ export class Grid {
         }
         p();
     }
-    _dbg_printv() {
+    _dbg_printv(po?: Point[]) {
         p("_printv");
         const [xlen, ylen] = this.size();
         let h = " ";
@@ -132,7 +141,9 @@ export class Grid {
         for (let x = 0; x < xlen; x++) {
             let row = x + "";
             for (let y = 0; y < ylen; y++) {
-                row += " " + this.g[x][y];
+                const val = " " + this.g[x][y];
+                if (po?.find((pt) => pt.x === x && pt.y ===y)) row += `\x1b[1m\x1b[31m${val}\x1b[0m`;
+                else row += val;
             }
             p(row);
         }
