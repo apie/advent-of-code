@@ -99,8 +99,8 @@ export function p(...t: any[]) {
 }
 
 export class Point {
-    readonly x: number;
-    readonly y: number;
+    x: number;
+    y: number;
     constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
@@ -142,8 +142,9 @@ export class Grid {
             let row = x + "";
             for (let y = 0; y < ylen; y++) {
                 const val = " " + this.g[x][y];
-                if (po?.find((pt) => pt.x === x && pt.y ===y)) row += `\x1b[1m\x1b[31m${val}\x1b[0m`;
-                else row += val;
+                if (po?.find((pt) => pt.x === x && pt.y === y)) {
+                    row += `\x1b[1m\x1b[31m${val}\x1b[0m`;
+                } else row += val;
             }
             p(row);
         }

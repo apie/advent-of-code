@@ -1,0 +1,185 @@
+<article class="day-desc">
+ <h2>
+  --- Day 6: Guard Gallivant ---
+ </h2>
+ <p>
+  The Historians use their fancy
+  <a href="4">
+   device
+  </a>
+  again, this time to whisk you all away to the North Pole prototype suit manufacturing lab... in the year
+  <a href="/2018/day/5">
+   1518
+  </a>
+  ! It turns out that having direct access to history is very convenient for a group of historians.
+ </p>
+ <p>
+  You still have to be careful of time paradoxes, and so it will be important to avoid anyone from 1518 while The Historians search for the Chief. Unfortunately, a single
+  <em>
+   guard
+  </em>
+  is patrolling this part of the lab.
+ </p>
+ <p>
+  Maybe you can work out where the guard will go ahead of time so that The Historians can search safely?
+ </p>
+ <p>
+  You start by making a map (your puzzle input) of the situation. For example:
+ </p>
+ <pre>
+  <code>
+   ....#.....
+.........#
+..........
+..#.......
+.......#..
+..........
+.#..^.....
+........#.
+#.........
+......#...
+  </code>
+ </pre>
+ <p>
+  The map shows the current position of the guard with
+  <code>
+   ^
+  </code>
+  (to indicate the guard is currently facing
+  <em>
+   up
+  </em>
+  from the perspective of the map). Any
+  <em>
+   obstructions
+  </em>
+  - crates, desks, alchemical reactors, etc. - are shown as
+  <code>
+   #
+  </code>
+  .
+ </p>
+ <p>
+  Lab guards in 1518 follow a very strict patrol protocol which involves repeatedly following these steps:
+ </p>
+ <ul>
+  <li>
+   If there is something directly in front of you, turn right 90 degrees.
+  </li>
+  <li>
+   Otherwise, take a step forward.
+  </li>
+ </ul>
+ <p>
+  Following the above protocol, the guard moves up several times until she reaches an obstacle (in this case, a pile of failed suit prototypes):
+ </p>
+ <pre>
+  <code>
+   ....#.....
+....^....#
+..........
+..#.......
+.......#..
+..........
+.#........
+........#.
+#.........
+......#...
+  </code>
+ </pre>
+ <p>
+  Because there is now an obstacle in front of the guard, she turns right before continuing straight in her new facing direction:
+ </p>
+ <pre>
+  <code>
+   ....#.....
+........&gt;#
+..........
+..#.......
+.......#..
+..........
+.#........
+........#.
+#.........
+......#...
+  </code>
+ </pre>
+ <p>
+  Reaching another obstacle (a spool of several
+  <em>
+   very
+  </em>
+  long polymers), she turns right again and continues downward:
+ </p>
+ <pre>
+  <code>
+   ....#.....
+.........#
+..........
+..#.......
+.......#..
+..........
+.#......v.
+........#.
+#.........
+......#...
+  </code>
+ </pre>
+ <p>
+  This process continues for a while, but the guard eventually leaves the mapped area (after walking past a tank of universal solvent):
+ </p>
+ <pre>
+  <code>
+   ....#.....
+.........#
+..........
+..#.......
+.......#..
+..........
+.#........
+........#.
+#.........
+......#v..
+  </code>
+ </pre>
+ <p>
+  By predicting the guard&#39;s route, you can determine which specific positions in the lab will be in the patrol path.
+  <em>
+   Including the guard&#39;s starting position
+  </em>
+  , the positions visited by the guard before leaving the area are marked with an
+  <code>
+   X
+  </code>
+  :
+ </p>
+ <pre>
+  <code>
+   ....#.....
+....XXXXX#
+....X...X.
+..#.X...X.
+..XXXXX#X.
+..X.X.X.X.
+.#XXXXXXX.
+.XXXXXXX#.
+#XXXXXXX..
+......#X..
+  </code>
+ </pre>
+ <p>
+  In this example, the guard will visit
+  <code>
+   <em>
+    41
+   </em>
+  </code>
+  distinct positions on your map.
+ </p>
+ <p>
+  Predict the path of the guard.
+  <em>
+   How many distinct positions will the guard visit before leaving the mapped area?
+  </em>
+ </p>
+</article>
