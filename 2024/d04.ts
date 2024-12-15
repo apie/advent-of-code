@@ -63,32 +63,23 @@ export const part1 = (lines: string[]): number => {
     return xmascounts.sum();
 };
 
-let seen = new Set();
-let numseen = 0;
 const countXMASpt2 = (lines: string[]): number => {
-    // p("lines", lines);
     return lines.map((line, i) => {
         return Array.from(line.matchAll(/A/g)).map((m) => {
-            // p('a found',i, m.index)
             const found = lines[i - 1]?.[m.index - 1] === "M" &&
+                lines[i + 1]?.[m.index - 1] === "M" &&
                 lines[i - 1]?.[m.index + 1] === "S" &&
-                lines[i + 1]?.[m.index - 1] === "M";
-            lines[i + 1]?.[m.index + 1] === "S";
-            if (found) {
-                numseen++;
+                lines[i + 1]?.[m.index + 1] === "S";
+            // debug output if testinput is being used
+            if (found && lines[0].length < 11) {
                 p("match found (A) at", i, m.index);
-                const ap = new Point(i, m.index);
-                const mp = new Point(i - 1, m.index - 1);
-                const sp = new Point(i - 1, m.index + 1);
-                const mp2 = new Point(i + 1, m.index - 1);
-                const sp2 = new Point(i + 1, m.index + 1);
-                const points = [ap, mp, sp, mp2, sp2];
-                const g = new Grid(lines);
-                g._dbg_printv(points);
-                p(seen);
-                // IDX is veranderd door het rotaten!
-                if (seen.has(`${i},${m.index}`)) return false;
-                seen.add(`${i},${m.index}`);
+                new Grid(lines)._dbg_printv([
+                    new Point(i, m.index),
+                    new Point(i - 1, m.index - 1),
+                    new Point(i + 1, m.index - 1),
+                    new Point(i - 1, m.index + 1),
+                    new Point(i + 1, m.index + 1),
+                ]);
             }
             return found;
         }).sum();
@@ -99,22 +90,13 @@ const countXMASpt2 = (lines: string[]): number => {
     ) => !Number.isNaN(result)).sum();
 };
 export const part2 = (lines: string[]): number => {
-    // p(Array.from('MMSS'.matchAll(/A/g)))
-    // return 0
     const gr = new WordGrid(lines);
-
-    // const myg = gr.g;
-    // [...Array(4).keys()].forEach((_direction) => gr.rotate90());
-    // assert(myg.join(".") === gr.g.join("."), "rotated 360 should be equal");
-
     const xmascounts = [...Array(4).keys()].map((_direction) => {
         gr.rotate90();
-        gr._dbg_printv();
+        // gr._dbg_printv();
         return countXMASpt2(gr.lines());
     });
     p("\n\n-->", xmascounts, "totaal:", xmascounts.sum());
-    p(numseen);
-    return numseen;
     return xmascounts.sum();
 };
 
