@@ -22,7 +22,7 @@ class Lab extends Grid {
         return new Point(x, y);
     }
     _dbg_printpos() {
-        this._dbg_printv([this.pos]);
+        this._dbg_printv([this.pos], "🯆");
         p("pos", this.pos);
         p("moving", this.dir);
         p("char at pos", this.getCharAtPos());

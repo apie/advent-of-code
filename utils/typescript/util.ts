@@ -130,7 +130,10 @@ export class Grid {
         }
         p();
     }
-    _dbg_printv(po?: Point[]) {
+    _dbg_printv(po?: Point[], char?: string) {
+        // Print the grid values,
+        // Optionally providing points that should be highlighted in bold red.
+        // Optionally providing the char that should be used for the highlighted positions.
         p("_printv");
         const [xlen, ylen] = this.size();
         let h = " ";
@@ -143,7 +146,7 @@ export class Grid {
             for (let y = 0; y < ylen; y++) {
                 const val = " " + this.g[x][y];
                 if (po?.find((pt) => pt.x === x && pt.y === y)) {
-                    row += `\x1b[1m\x1b[31m${val}\x1b[0m`;
+                    row += `\x1b[1m\x1b[31m${char ? " " + char : val}\x1b[0m`;
                 } else row += val;
             }
             p(row);
