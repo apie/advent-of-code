@@ -1,4 +1,5 @@
 import { assertEquals } from "jsr:@std/assert/equals";
+import memoize from "jsr:@korkje/memz";
 import "./util.ts";
 
 const getMiddlePageNumber = (pageNumbers: number[]) =>
@@ -8,13 +9,14 @@ let rules: {
     [x: string]: number;
 }[] = [];
 
-const sorter = (second: number, first: number) =>
+const sorter = memoize((second: number, first: number) =>
     rules.filter((
             rule,
         ) => Object.values(rule).includes(first)
         ).find((rule) => rule[second] === first)
         ? -1
-        : 1;
+        : 1
+);
 
 const pageUpdateValid = (
     pageUpdate: number[],
