@@ -22,8 +22,25 @@ class Lab extends Grid {
         const y = this.g[x].indexOf("^");
         return new Point(x, y);
     }
+    override _dbg_printv(po?: Point[]) {
+        let char = "🯅";
+        switch (this.dir) {
+            case direction.UP:
+                char = "🯆";
+                break;
+            case direction.DOWN:
+                break;
+            case direction.LEFT:
+                char = "🯇";
+                break;
+            case direction.RIGHT:
+                char = "🯈";
+                break;
+        }
+        super._dbg_printv(po, char);
+    }
     _dbg_printpos() {
-        this._dbg_printv([this.pos], "🯆");
+        this._dbg_printv([this.pos]);
         p("pos", this.pos);
         p("moving", this.dir);
         p("char at pos", this.getCharAtPos());
