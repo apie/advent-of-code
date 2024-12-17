@@ -13,6 +13,7 @@ class Lab extends Grid {
     constructor(g: string[]) {
         super(g);
         this.pos = this._parseInitialPos();
+        this.g[this.pos.x] = this.g[this.pos.x].replace("^", ".");
         this.dir = direction.UP;
     }
     _parseInitialPos() {
