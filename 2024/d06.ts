@@ -23,29 +23,36 @@ class Lab extends Grid {
         return new Point(x, y);
     }
     override _dbg_printv(po?: Point[]) {
-        let char = "🯅";
+        let char = "";
         switch (this.dir) {
             case direction.UP:
-                char = "🯆";
+                char = "↑";
                 break;
             case direction.DOWN:
+                char = "↓";
                 break;
             case direction.LEFT:
-                char = "🯇";
+                char = "←";
                 break;
             case direction.RIGHT:
-                char = "🯈";
+                char = "→";
                 break;
         }
         super._dbg_printv(po, char);
     }
     _dbg_printpos() {
         this._dbg_printv([this.pos]);
-        p("pos", this.pos);
-        p("moving", this.dir);
-        p("char at pos", this.getCharAtPos());
-        p("char in front", this.getCharInFrontOfPos());
-        p("--------------");
+        p(
+            "pos",
+            this.pos,
+            "moving",
+            this.dir + ".",
+            "char at pos:",
+            this.getCharAtPos(),
+            "char in front:",
+            this.getCharInFrontOfPos(),
+        );
+        p();
     }
     getCharAtPos() {
         return this.g[this.pos.x][this.pos.y];
@@ -65,6 +72,7 @@ class Lab extends Grid {
     }
     move() {
         if (this.getCharInFrontOfPos() === "#") this.turnRight();
+        else if (this.getCharInFrontOfPos() === "O") this.turnRight();
         switch (this.dir) {
             case direction.UP:
                 this.pos.x -= 1;
@@ -96,30 +104,60 @@ class Lab extends Grid {
                 this.dir = direction.DOWN;
                 break;
         }
+        if (this.size()[0] < 11) this._dbg_printpos();
     }
     inGrid(): boolean {
         const [x, y] = this.size();
         return this.pos.x.between(0, x) && this.pos.y.between(0, y);
     }
+    getKey(withDir: boolean = false): string {
+        const key = `${this.pos.x},${this.pos.y}`;
+        if (withDir) return key + `,${this.dir}`;
+        return key;
+    }
+    getKeyWithDir(): string {
+        return this.getKey(true);
+    }
 }
 
-export const part1 = (lines: string[]): number => {
+export const getVisitedLocations = (
+    lines: string[],
+): Set<string> => {
+    const l = new Lab(lines);
+    l._dbg_printpos();
+
+    const visited: Set<string> = new Set();
+    visited.add(l.getKey());
+    while (l.inGrid()) {
+        try {
+            l.move();
+            visited.add(l.getKey());
+        } catch (_error) {
+            break; // moved out of grid
+        }
+    }
+    return visited;
+};
+
+export const part1 = (lines: string[]): number =>
+    getVisitedLocations(lines).size;
+
+export const causesLoop = (lines: string[]): boolean => {
     const l = new Lab(lines);
     l._dbg_printpos();
 
     const visited = new Set();
-    visited.add(`${l.pos.x},${l.pos.y}`);
-    const size = l.size();
+    visited.add(l.getKeyWithDir());
     while (l.inGrid()) {
-        try {
-            l.move();
-            visited.add(`${l.pos.x},${l.pos.y}`);
-            if (size[0] < 11) l._dbg_printpos();
-        } catch (error) {
-            break;
+        l.move();
+        if (visited.has(l.getKeyWithDir())) {
+            // "Already visited ";
+            p("looping");
+            return true;
         }
+        visited.add(l.getKeyWithDir());
     }
-    return visited.size;
+    return false;
 };
 export const part2 = (lines: string[]): number => {
     return 0;

@@ -110,7 +110,8 @@ export class Point {
 export class Grid {
     g: string[];
     constructor(g: string[]) {
-        this.g = g;
+        // assign copy of g
+        this.g = Object.assign([], g);
     }
     size(): number[] {
         return [this.g.length, this.g[0].length];
