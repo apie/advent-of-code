@@ -40,7 +40,15 @@ Object.defineProperty(Array.prototype, "count", {
 Number.prototype.between = function (a, b) {
     return this >= a && this <= b;
 };
-
+String.prototype.replaceCharAt = function (
+    position: number,
+    char: string,
+): string {
+    assert(char.length === 1, "char must be only one char long");
+    const charArray = this.split("");
+    charArray[position] = char;
+    return charArray.join("");
+};
 declare global {
     interface Array<T> {
         sum(): number;
@@ -50,6 +58,12 @@ declare global {
     }
     interface Number {
         between(a: Number, b: Number): boolean;
+    }
+    interface String {
+        /**
+         * Replaces the character at the provided position with the provided character.
+         */
+        replaceCharAt(position: Number, char: string): string;
     }
 }
 

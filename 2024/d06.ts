@@ -13,7 +13,7 @@ class Lab extends Grid {
     constructor(g: string[]) {
         super(g);
         this.pos = this._parseInitialPos();
-        this.g[this.pos.x] = this.g[this.pos.x].replace("^", ".");
+        this.g[this.pos.x] = this.g[this.pos.x].replaceCharAt(this.pos.y, ".");
         this.dir = direction.UP;
     }
     _parseInitialPos() {
@@ -70,9 +70,12 @@ class Lab extends Grid {
                 return this.g[this.pos.x][this.pos.y + 1];
         }
     }
+    positionBlocked() {
+        return (this.getCharInFrontOfPos() === "#") ||
+            (this.getCharInFrontOfPos() === "O");
+    }
     move() {
-        if (this.getCharInFrontOfPos() === "#") this.turnRight();
-        else if (this.getCharInFrontOfPos() === "O") this.turnRight();
+        while (this.positionBlocked()) this.turnRight();
         switch (this.dir) {
             case direction.UP:
                 this.pos.x -= 1;
@@ -89,7 +92,6 @@ class Lab extends Grid {
         }
     }
     turnRight() {
-        p("~~turning");
         switch (this.dir) {
             case direction.UP:
                 this.dir = direction.RIGHT;
@@ -124,7 +126,7 @@ export const getVisitedLocations = (
     lines: string[],
 ): Set<string> => {
     const l = new Lab(lines);
-    l._dbg_printpos();
+    if (l.size()[0] < 11) l._dbg_printpos();
 
     const visited: Set<string> = new Set();
     visited.add(l.getKey());
@@ -144,23 +146,39 @@ export const part1 = (lines: string[]): number =>
 
 export const causesLoop = (lines: string[]): boolean => {
     const l = new Lab(lines);
-    l._dbg_printpos();
-
     const visited = new Set();
     visited.add(l.getKeyWithDir());
     while (l.inGrid()) {
-        l.move();
-        if (visited.has(l.getKeyWithDir())) {
-            // "Already visited ";
-            p("looping");
-            return true;
+        try {
+            l.move();
+            if (visited.has(l.getKeyWithDir())) {
+                // "Already visited ";
+                return true;
+            }
+            visited.add(l.getKeyWithDir());
+        } catch (_error) {
+            break; // moved out of grid
         }
-        visited.add(l.getKeyWithDir());
     }
     return false;
 };
 export const part2 = (lines: string[]): number => {
-    return 0;
+    // Locations where we can drop things, based on part1. Using a copy of lines.
+    const visitedLocations = getVisitedLocations(Object.assign([], lines));
+    let numberOfDropLocations = 0;
+    const dropLocations = Array.from(visitedLocations).map((a) =>
+        a.split(",").map((c) => Number(c))
+    );
+    // Remove start pos from the list (per instruction)
+    dropLocations.shift();
+    dropLocations.forEach((dl) => {
+        // Drop object 'O' on each droplocation
+        const clonedLines: string[] = Object.assign([], lines);
+        const [row, col] = dl;
+        clonedLines[row] = clonedLines[row].replaceCharAt(col, "O");
+        if (causesLoop(clonedLines)) numberOfDropLocations++;
+    });
+    return numberOfDropLocations;
 };
 
 function d06(input: string): number[] {

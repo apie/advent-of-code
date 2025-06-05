@@ -17,6 +17,7 @@ const testinput = `
 Deno.test("part 1", () => {
   assertEquals(part1(testinput), 41);
 });
-// Deno.test("part 2", () => {
-//   assertEquals(part2(testinput), -1);
-// });
+Deno.test("part 2", () => {
+  assertEquals(part2(testinput), 6);
+});
+// Note: test not complete. Does not handle case where you need to make multiple turns before you can move forward.
