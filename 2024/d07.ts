@@ -1,18 +1,17 @@
+import { permutationsWithReplacement } from "https://deno.land/x/combinatorics/mod.ts";
 import "./util.ts";
 import { p } from "./util.ts";
 
-import { array } from "jsr:@korkje/ncp";
-const car = array;
-
 export const add = (a: number, b: number): number => a + b;
 export const mul = (a: number, b: number): number => a * b;
-const OPERATORS = [
-    add,
-    mul,
-];
-export const part1 = (lines: string[]): number => {
+export const con = (a: number, b: number): number =>
+    Number(String(a) + String(b));
+export const getTotalCalibration = (
+    lines: string[],
+    OPERATORS: CallableFunction[],
+): number => {
     let totalCalibrationResult = 0;
-    lines.forEach((line, nline) => {
+    lines.forEach((line) => {
         const testValue = Number(line.split(":")[0]);
         p();
         p(line);
@@ -20,112 +19,10 @@ export const part1 = (lines: string[]): number => {
             Number(nstring)
         );
         // p(numbers);
-        const oparray = OPERATORS.map((_op, i) => i);
-        const narray = numbers.slice(1).map((_n, i) => i % OPERATORS.length);
-        p("oparray", oparray);
-        p("narray", narray);
-        let opPermutations: number[][] = [[]];
-        switch (numbers.length - 1) {
-            case 1:
-                opPermutations = oparray.map((op) => [op]);
-                break;
-            case 2:
-                opPermutations = car(narray, oparray);
-                break;
-            case 3:
-                opPermutations = car(narray, oparray, oparray);
-                break;
-            case 4:
-                opPermutations = car(narray, oparray, oparray, oparray);
-                break;
-            case 5:
-                opPermutations = car(
-                    narray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                );
-                break;
-            case 6:
-                opPermutations = car(
-                    narray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                );
-                break;
-            case 7:
-                opPermutations = car(
-                    narray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                );
-                break;
-            case 8:
-                opPermutations = car(
-                    narray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                );
-                break;
-            case 9:
-                opPermutations = car(
-                    narray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                );
-                break;
-            case 10:
-                opPermutations = car(
-                    narray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                );
-                break;
-            case 11:
-                opPermutations = car(
-                    narray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                    oparray,
-                );
-                break;
-            default:
-                throw Error(`not implemented ${numbers.length - 1}`);
-        }
-        p("opPermutations", opPermutations);
+        const opPermutations = permutationsWithReplacement(
+            OPERATORS,
+            numbers.length - 1,
+        );
         let foundLine = false;
         // loop all possible combinations of the operators until we have a match
         opPermutations.forEach((opPermutation) => {
@@ -133,8 +30,7 @@ export const part1 = (lines: string[]): number => {
             p(opPermutation);
 
             const res = numbers.slice(1).reduce((prev, num, i) => {
-                const opnum = opPermutation[i];
-                const op = OPERATORS[opnum];
+                const op = opPermutation[i];
                 p(
                     "prev",
                     prev,
@@ -143,7 +39,7 @@ export const part1 = (lines: string[]): number => {
                     "num",
                     num,
                 );
-                return op(num, prev);
+                return op(prev, num);
             }, numbers[0] || 0);
             if (res === testValue) {
                 totalCalibrationResult += testValue;
@@ -154,11 +50,14 @@ export const part1 = (lines: string[]): number => {
             p("res:", res);
         });
     });
+    p(lines);
     return totalCalibrationResult;
 };
-export const part2 = (lines: string[]): number => {
-    return 0;
-};
+export const part1 = (lines: string[]): number =>
+    getTotalCalibration(lines, [add, mul]);
+
+export const part2 = (lines: string[]): number =>
+    getTotalCalibration(lines, [add, mul, con]);
 
 function d07(input: string): number[] {
     const lines = input.trim().split("\n");

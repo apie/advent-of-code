@@ -16,6 +16,6 @@ const testinput = `
 Deno.test("part 1", () => {
   assertEquals(part1(testinput), 3749);
 });
-// Deno.test("part 2", () => {
-//   assertEquals(part2(testinput), -1);
-// });
+Deno.test("part 2", () => {
+  assertEquals(part2(testinput), 11387);
+});

@@ -1,0 +1,99 @@
+<article class="day-desc">
+ <h2 id="part2">
+  --- Part Two ---
+ </h2>
+ <p>
+  The engineers seem concerned; the total calibration result you gave them is nowhere close to being within safety tolerances. Just then, you spot your mistake: some well-hidden elephants are holding a
+  <em>
+   third type of operator
+  </em>
+  .
+ </p>
+ <p>
+  The
+  <a href="https://en.wikipedia.org/wiki/Concatenation" target="_blank">
+   concatenation
+  </a>
+  operator (
+  <code>
+   <span title="I think you mean &#34;.&#34;.">
+    ||
+   </span>
+  </code>
+  ) combines the digits from its left and right inputs into a single number. For example,
+  <code>
+   12 || 345
+  </code>
+  would become
+  <code>
+   12345
+  </code>
+  . All operators are still evaluated left-to-right.
+ </p>
+ <p>
+  Now, apart from the three equations that could be made true using only addition and multiplication, the above example has three more equations that can be made true by inserting operators:
+ </p>
+ <ul>
+  <li>
+   <code>
+    156: 15 6
+   </code>
+   can be made true through a single concatenation:
+   <code>
+    15 || 6 = 156
+   </code>
+   .
+  </li>
+  <li>
+   <code>
+    7290: 6 8 6 15
+   </code>
+   can be made true using
+   <code>
+    6 * 8 || 6 * 15
+   </code>
+   .
+  </li>
+  <li>
+   <code>
+    192: 17 8 14
+   </code>
+   can be made true using
+   <code>
+    17 || 8 + 14
+   </code>
+   .
+  </li>
+ </ul>
+ <p>
+  Adding up all six test values (the three that could be made before using only
+  <code>
+   +
+  </code>
+  and
+  <code>
+   *
+  </code>
+  plus the new three that can now be made by also using
+  <code>
+   ||
+  </code>
+  ) produces the new
+  <em>
+   total calibration result
+  </em>
+  of
+  <code>
+   <em>
+    11387
+   </em>
+  </code>
+  .
+ </p>
+ <p>
+  Using your new knowledge of elephant hiding spots, determine which equations could possibly be true.
+  <em>
+   What is their total calibration result?
+  </em>
+ </p>
+</article>

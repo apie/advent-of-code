@@ -1,5 +1,10 @@
 import { assert } from "jsr:@std/assert/assert";
+import memoize from "jsr:@korkje/memz";
 
+export const isRunningInTest = memoize((): boolean => {
+    const stack = new Error().stack;
+    return stack?.includes("test") || stack?.includes("Test") || false;
+});
 Object.defineProperty(Array.prototype, "sum", {
     enumerable: false,
     value: function () {
@@ -109,8 +114,7 @@ export function* combinations3(
 
 // deno-lint-ignore no-explicit-any
 export function p(...t: any[]) {
-    // return;
-    console.debug(...t);
+    if (isRunningInTest()) console.debug(...t);
 }
 
 export class Point {
