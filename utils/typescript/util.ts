@@ -124,7 +124,13 @@ export class Point {
         this.x = x;
         this.y = y;
     }
+    getUniqueKey() {
+        return `${this.x},${this.y}`;
+    }
 }
+
+export const sortPoints = (pointArray: Point[]): Point[] =>
+    pointArray.sort((a, b) => (a.y * 10_000 + a.x) - (b.y * 10_000 + b.x));
 
 export class Grid {
     g: string[];
@@ -156,13 +162,14 @@ export class Grid {
         // Optionally providing the char that should be used for the highlighted positions.
         p("_printv");
         const [xlen, ylen] = this.size();
-        let h = " ";
+        let h = "  ";
         for (let y = 0; y < ylen; y++) {
             h += " " + y;
         }
         p(h);
         for (let x = 0; x < xlen; x++) {
             let row = x + "";
+            if (x < 10) row += " ";
             for (let y = 0; y < ylen; y++) {
                 const val = " " + this.g[x][y];
                 if (po?.find((pt) => pt.x === x && pt.y === y)) {
