@@ -156,12 +156,16 @@ export class Grid {
         }
         p();
     }
-    _dbg_printv(po?: Point[], char?: string, invert?: boolean) {
+    _dbg_printv(
+        po?: Point[] | MapIterator<Point>,
+        char?: string,
+        invert?: boolean,
+    ) {
         // Print the grid values,
         // Optionally providing points that should be highlighted in bold red.
         // Optionally providing the char that should be used for the highlighted positions.
         if (po && invert) {
-            po = po.map((poi) => new Point(poi.y, poi.x));
+            po = Array.from(po).map((poi) => new Point(poi.y, poi.x));
         }
         p("_printv");
         const [xlen, ylen] = this.size();

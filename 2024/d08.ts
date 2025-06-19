@@ -88,22 +88,16 @@ export const getUniqueAntinodesOnMap = (
             });
 
             g._dbg_printv(
-                [
-                    new Point(a.x, a.y), // must convert Antenna to Point to pass to this dbg func
-                    new Point(b.x, b.y), // must convert Antenna to Point to pass to this dbg func
-                    ...Array.from(antinodes),
-                ],
+                [a, b, ...antinodes],
                 "",
                 true,
             );
         });
     });
-    p(allAntinodes);
+    // p(allAntinodes);
     sortPoints(Array.from(allAntinodes.values())).forEach((an) => p(an));
     g._dbg_printv(
-        [
-            ...Array.from(allAntinodes.values()),
-        ],
+        allAntinodes.values(),
         "",
         true,
     );
