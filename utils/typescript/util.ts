@@ -58,6 +58,9 @@ declare global {
     interface Array<T> {
         sum(): number;
         prod(): number;
+        /**
+         * Returns the highest number in the array.
+         */
         max(): number;
         count(c: string | number | boolean): number;
     }

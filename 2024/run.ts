@@ -6,6 +6,7 @@ import d05 from "./d05.ts";
 import d06 from "./d06.ts";
 import d07 from "./d07.ts";
 import d08 from "./d08.ts";
+import d09 from "./d09.ts";
 
 const [day] = Deno.args;
 if (!day) {
@@ -41,6 +42,9 @@ switch (day) {
         break;
     case "8":
         answers = d08(text);
+        break;
+    case "9":
+        answers = d09(text);
         break;
     default:
         console.error("Unknown day");
