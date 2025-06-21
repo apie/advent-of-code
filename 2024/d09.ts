@@ -1,18 +1,15 @@
 import "./util.ts";
 import { p, isRunningInTest } from "./util.ts";
 
-type fsobjtypes = 'file' | 'free';
 interface ifilesystem {
     pos: number;
-    type: fsobjtypes;
+    type: 'file' | 'free';
     id?: number;
     len: number;
 }
 const checksum = (filemap: Map<number, ifilesystem>): number => Array.from(filemap.values().filter((curobj) => curobj.type === "file").map((curobj) => {
-    p('mapping', curobj)
     let tot = 0
     for (let plen = 0; plen < curobj.len; plen++) tot += curobj.id! * (curobj.pos + plen);
-    p(tot)
     return tot;
 })).sum()
 
@@ -80,6 +77,40 @@ const compact = (filemap: Map<number, ifilesystem>): void => {
     })
     p('done compacting')
 }
+const compactWholeFiles = (filemap: Map<number, ifilesystem>): void => {
+    p('compacting..')
+    Array.from(filemap.values().filter((curobj) => curobj.type === 'file')).sort((a, b) => -1 * (a?.id || 0) + (b?.id || 0)).forEach((lastobj) => {
+        //find free space
+        const freeobj = Array.from(filemap.values().filter((curobj) => curobj.type === 'free')).sort((a, b) => a.pos - b.pos).find((curobj) => curobj.len >= lastobj.len)
+        if (!freeobj) return
+        if (freeobj.pos > lastobj.pos) return;
+        p('--> moving', lastobj.id)
+        // move lastobj to position of freeobj
+        filemap.set(freeobj.pos, {
+            pos: freeobj.pos,
+            id: lastobj.id,
+            type: lastobj.type,
+            len: lastobj.len,
+        })
+        // update lastobj. dont delete because it might not be the last obj
+        filemap.set(lastobj.pos, {
+            pos: lastobj.pos,
+            type: 'free',
+            len: lastobj.len,
+        });
+        if (freeobj.len > lastobj.len) {
+            // if needed add new freeobj after our moved obj
+            filemap.set(freeobj.pos + lastobj.len, {
+                pos: freeobj.pos + lastobj.len,
+                type: 'free',
+                len: freeobj.len - lastobj.len,
+            })
+        }
+        printfs(filemap)
+
+    })
+    p('done compacting')
+}
 const printfs = (filemap: Map<number, ifilesystem>): void => {
     if (!isRunningInTest()) return;
     let toprint = '';
@@ -101,14 +132,12 @@ const printfs = (filemap: Map<number, ifilesystem>): void => {
         curpos += curobj.len;
     }
     p(toprint)
-
 }
 const parsemap = (denseformat: string): Map<number, ifilesystem> => {
     const filesystemmap = new Map<number, ifilesystem>();
     let id = 0;
     let pos = 0;
     denseformat.split('').map((c) => Number(c)).forEach((n, i) => {
-        // p(n)
         if (i % 2 == 0) {
             filesystemmap.set(pos, {
                 pos: pos,
@@ -131,18 +160,18 @@ const parsemap = (denseformat: string): Map<number, ifilesystem> => {
 export const part1 = (lines: string[]): number => {
     p(lines[0])
     const filesystemmap = parsemap(lines[0])
-    // p('filesystemmap:')
-    // p(filesystemmap)
-    // p()
-
     printfs(filesystemmap)
     compact(filesystemmap)
     printfs(filesystemmap)
-    p('klaar')
     return checksum(filesystemmap);
 };
 export const part2 = (lines: string[]): number => {
-    return 0;
+    p(lines[0])
+    const filesystemmap = parsemap(lines[0])
+    printfs(filesystemmap)
+    compactWholeFiles(filesystemmap)
+    printfs(filesystemmap)
+    return checksum(filesystemmap);
 };
 
 function d09(input: string): number[] {

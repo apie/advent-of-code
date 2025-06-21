@@ -1,0 +1,53 @@
+<article class="day-desc">
+ <h2 id="part2">
+  --- Part Two ---
+ </h2>
+ <p>
+  Upon completion, two things immediately become clear. First, the disk definitely has a lot more contiguous free space, just like the amphipod hoped. Second, the computer is running much more slowly! Maybe introducing all of that
+  <a href="https://en.wikipedia.org/wiki/File_system_fragmentation" target="_blank">
+   file system fragmentation
+  </a>
+  was a bad idea?
+ </p>
+ <p>
+  The eager amphipod already has a new plan: rather than move individual blocks, he&#39;d like to try compacting the files on his disk by moving
+  <em>
+   whole files
+  </em>
+  instead.
+ </p>
+ <p>
+  This time, attempt to move whole files to the leftmost span of free space blocks that could fit the file. Attempt to move each file exactly once in order of
+  <em>
+   decreasing file ID number
+  </em>
+  starting with the file with the highest file ID number. If there is no span of free space to the left of a file that is large enough to fit the file, the file does not move.
+ </p>
+ <p>
+  The first example from above now proceeds differently:
+ </p>
+ <pre>
+  <code>
+   00...111...2...333.44.5555.6666.777.888899
+0099.111...2...333.44.5555.6666.777.8888..
+0099.1117772...333.44.5555.6666.....8888..
+0099.111777244.333....5555.6666.....8888..
+00992111777.44.333....5555.6666.....8888..
+  </code>
+ </pre>
+ <p>
+  The process of updating the filesystem checksum is the same; now, this example&#39;s checksum would be
+  <code>
+   <em>
+    2858
+   </em>
+  </code>
+  .
+ </p>
+ <p>
+  Start over, now compacting the amphipod&#39;s hard drive using this new method instead.
+  <em>
+   What is the resulting filesystem checksum?
+  </em>
+ </p>
+</article>
