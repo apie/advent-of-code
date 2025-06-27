@@ -184,12 +184,10 @@ export const part2 = (lines: string[]): number => {
     return checksum(filesystemmap);
 };
 
-function d09(input: string): number[] {
+function* d09(input: string): Generator<number> {
     const lines = input.trim().split("\n");
-    return [
-        part1(lines),
-        part2(lines),
-    ];
+    yield part1(lines);
+    yield part2(lines);
 }
 
 export default d09;

@@ -8,12 +8,10 @@ export const part2 = (lines: string[]): number => {
     return 0;
 };
 
-function d_DAY_(input: string): number[] {
+function* d_DAY_(input: string): Generator<number> {
     const lines = input.trim().split("\n");
-    return [
-        part1(lines),
-        part2(lines),
-    ];
+    yield part1(lines);
+    yield part2(lines);
 }
 
 export default d_DAY_;

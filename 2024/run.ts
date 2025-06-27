@@ -50,6 +50,7 @@ switch (day) {
         console.error("Unknown day");
         Deno.exit(1);
 }
-console.log("DAY", day, "solution part1:", answers[0]);
-console.log("DAY", day, "solution part2:", answers[1]);
+answers.forEach((answer, i) =>
+    console.log("Day", day, "solution part", i + 1, ":", answer)
+);
 console.log("Solution took", Date.now() - startTime, "ms");
