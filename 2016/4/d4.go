@@ -32,8 +32,8 @@ func getMostCommonLetters(word string) []string {
 	for _, letter := range strings.Split(strings.ReplaceAll(word, "-", ""), "") {
 		m[letter]++
 	}
-	fmt.Println(len(m))
-	fmt.Println(m)
+	// fmt.Println(len(m))
+	// fmt.Println(m)
 	mostCommon := make([]string, 0, len(m))
 
 	for key := range m {
@@ -65,10 +65,10 @@ func D4a(filename string) int {
 	}
 	realRoomSectorIdSum := 0
 	for _, line := range strings.Split(strings.TrimSpace(string(content)), "\n") {
-		fmt.Println(">", line)
+		// fmt.Println(">", line)
 		room := parseRoom(line)
 		// fmt.Println("#", room)
-		fmt.Printf("is real? %t\n", room.isReal())
+		// fmt.Printf("is real? %t\n", room.isReal())
 		if room.isReal() {
 			realRoomSectorIdSum += room.sectorId
 		}
@@ -76,21 +76,48 @@ func D4a(filename string) int {
 	return realRoomSectorIdSum
 }
 
+func (r Room) decryptName() string {
+	// fmt.Println(r.sectorId, r.sectorId%26)
+	decrypted := ""
+	for _, letter := range strings.Split(r.encname, "") {
+		if letter == "-" {
+			decrypted += " "
+		} else {
+			// fmt.Printf("%d=%c ", rune(letter[0])-96, rune(letter[0]))
+			newl := (int(rune(letter[0])) - 96 + r.sectorId) % 26
+			// fmt.Printf("-> %d=%c ", newl, newl+96)
+			// fmt.Printf("%c", newl+96)
+			decrypted += fmt.Sprintf("%c", newl+96)
+		}
+	}
+	// fmt.Println()
+	// fmt.Println(decrypted)
+	return decrypted
+}
 func D4b(filename string) int {
-	r_obj := regexp.MustCompile(`\s+`)
 	content, err := os.ReadFile(filename)
 	if err != nil {
 		fmt.Println("Err")
 	}
-	fmt.Println(r_obj)
-	fmt.Println(string(content))
-	return 0 // TODO
+	for _, line := range strings.Split(strings.TrimSpace(string(content)), "\n") {
+		// fmt.Println(">", line)
+		room := parseRoom(line)
+		// fmt.Println("#", room)
+		// fmt.Printf("is real? %t\n", room.isReal())
+		// fmt.Println(room.decryptName())
+		if room.isReal() {
+			if strings.Contains(room.decryptName(), "northpole") {
+				return room.sectorId
+			}
+		}
+	}
+	return -1
 }
 
 func main() {
 	filename := "d04.input"
 	ansa := D4a(filename)
 	fmt.Println("Part a: sum of the sector IDs of the real rooms: ", ansa)
-	// ansb := D4b(filename)
-	// fmt.Println("Part b: ?: ", ansb)
+	ansb := D4b(filename)
+	fmt.Println("Part b: sector id of the room where north pole objects are stored: ", ansb)
 }
