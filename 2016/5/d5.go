@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 func MD5(v string) string {
@@ -75,8 +76,15 @@ func D5b(filename string) string {
 
 func main() {
 	filename := "d05.input"
+	start := time.Now()
+	elapsed := func() time.Duration {
+		return time.Since(start).Round(time.Millisecond)
+	}
 	ansa := D5a(filename)
 	fmt.Println("Part a: Given the actual Door ID, what is the password?:", ansa)
+	fmt.Printf("Took %6s\n", elapsed())
+	start = time.Now()
 	ansb := D5b(filename)
 	fmt.Println("Part b: Given the actual Door ID and this new method, what is the password?:", ansb)
+	fmt.Printf("Took %6s\n", elapsed())
 }
