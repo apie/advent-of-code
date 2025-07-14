@@ -16,8 +16,8 @@ func TestD5a(t *testing.T) {
 }
 
 func TestD5b(t *testing.T) {
-	in := "d05.test.2"
-	out := ""
+	in := "d05.test.1"
+	out := "05ace8e3"
 	t.Run(t.Name(), func(t *testing.T) {
 		ans := D5b(in)
 		if ans != out {

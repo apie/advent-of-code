@@ -36,16 +36,41 @@ func D5a(filename string) string {
 
 	}
 	passwordStr := fmt.Sprintf("%s", password)
-	fmt.Println(passwordStr)
 	return passwordStr
 }
 
 func D5b(filename string) string {
-	_, err := os.ReadFile(filename)
+	content, err := os.ReadFile(filename)
 	if err != nil {
 		fmt.Println(fmt.Printf("Could not read file %s", filename))
 	}
-	return "fout"
+	roomId := strings.TrimSpace(string(content))
+	var password [8]byte
+	i := 0
+	for counter := 0; i < 8; counter++ {
+		if counter > 1e8 {
+			break
+		}
+		tohash := fmt.Sprintf("%s%d", roomId, counter)
+		hash := MD5(tohash)
+		if hash[:5] == "00000" {
+			pos := int(hash[5] - 48) // ascii str to numeric
+			if pos > 7 {
+				continue
+			}
+			if password[pos] != 0b0 {
+				continue
+			}
+			fmt.Println(password)
+			// fmt.Printf("pos %c, char: %c \n", hash[5], hash[6])
+			password[pos] = hash[6]
+			i++
+
+		}
+
+	}
+	passwordStr := fmt.Sprintf("%s", password)
+	return passwordStr
 }
 
 func main() {
@@ -53,5 +78,5 @@ func main() {
 	ansa := D5a(filename)
 	fmt.Println("Part a: Given the actual Door ID, what is the password?:", ansa)
 	ansb := D5b(filename)
-	fmt.Println("Part b: :", ansb)
+	fmt.Println("Part b: Given the actual Door ID and this new method, what is the password?:", ansb)
 }
