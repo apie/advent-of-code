@@ -15,8 +15,6 @@ func getMostCommonLetters(word string) []string {
 	for _, letter := range strings.Split(strings.ReplaceAll(word, "-", ""), "") {
 		m[letter]++
 	}
-	// fmt.Println(len(m))
-	// fmt.Println(m)
 	mostCommon := make([]string, 0, len(m))
 
 	for key := range m {
@@ -29,46 +27,52 @@ func getMostCommonLetters(word string) []string {
 		}
 		return m[mostCommon[i]] > m[mostCommon[j]]
 	})
-
-	// for _, k := range mostCommon {
-	//  fmt.Println(k, m[k])
-	// }
 	return mostCommon
-
 }
 
-func D6a(filename string) string {
+func readContent(filename string) []byte {
 	content, err := os.ReadFile(filename)
 	if err != nil {
 		fmt.Println(fmt.Printf("Could not read file %s", filename))
 	}
-	// Get most common character per column
+	return content
+}
+
+func makeListOfColumns(content []byte) [8]string {
 	// First make list of columns
 	var columns [8]string
 	for _, line := range strings.Split(strings.TrimSpace(string(content)), "\n") {
-		// fmt.Println(line)
 		for colNum, char := range line {
-			// fmt.Println(string(char))
 			columns[colNum] += string(char)
 		}
 	}
-	// fmt.Println("----")
-	// fmt.Println(columns)
+	return columns
+}
+
+func D6a(filename string) string {
+	columns := makeListOfColumns(readContent(filename))
 	answer := ""
 	for _, column := range columns {
 		if len(column) == 0 {
 			continue
 		}
 		mc := getMostCommonLetters(column)
-		// fmt.Println(mc)
 		answer += mc[0]
 	}
-	// fmt.Println("--=-")
 	return answer
 }
 
 func D6b(filename string) string {
-	return "fail"
+	columns := makeListOfColumns(readContent(filename))
+	answer := ""
+	for _, column := range columns {
+		if len(column) == 0 {
+			continue
+		}
+		mc := getMostCommonLetters(column)
+		answer += mc[len(mc)-1]
+	}
+	return answer
 }
 
 func main() {
@@ -78,10 +82,10 @@ func main() {
 		return time.Since(start).Round(time.Millisecond)
 	}
 	ansa := D6a(filename)
-	fmt.Println("Part a: Given the recording in your puzzle input, what is the error-corrected version of the message being sent?", ansa)
+	fmt.Println("Part a: Given the recording in your puzzle input, what is the error-corrected version of the message being sent? (most common letter)", ansa)
 	fmt.Printf("Took %6s\n", elapsed())
 	start = time.Now()
 	ansb := D6b(filename)
-	fmt.Println("Part b: :", ansb)
+	fmt.Println("Part b: Given the recording in your puzzle input and this new decoding methodology, what is the original message that Santa is trying to send? (least common letter):", ansb)
 	fmt.Printf("Took %6s\n", elapsed())
 }
