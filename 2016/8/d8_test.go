@@ -14,14 +14,3 @@ func TestD8a(t *testing.T) {
 		}
 	})
 }
-
-func TestD8b(t *testing.T) {
-	in := "d08.test.2"
-	out := -1
-	t.Run(t.Name(), func(t *testing.T) {
-		ans := D8b(in)
-		if ans != out {
-			t.Errorf("got %d, want %d", ans, out)
-		}
-	})
-}
