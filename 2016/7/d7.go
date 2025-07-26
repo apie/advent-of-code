@@ -41,28 +41,46 @@ func splitLines(content []byte) []string {
 	return strings.Split(strings.TrimSpace(string(content)), "\n")
 }
 
+type buffer struct {
+	size int
+	buf  []rune
+}
+
+func NewBuffer(size int) buffer {
+	var arr []rune
+	return buffer{size, arr}
+}
+func (b buffer) clear() buffer {
+	clear(b.buf)
+	return b
+}
+func (b buffer) append(c rune) buffer {
+	if len(b.buf) == b.size {
+		// shift to left
+		for i := range b.size - 1 {
+			b.buf[i] = b.buf[i+1]
+		}
+		b.buf[b.size-1] = c
+	} else {
+		b.buf = append(b.buf, c)
+	}
+	return b
+}
+
 func supportsTLS(ip string) bool {
-	var stack []rune
+	var stack = NewBuffer(4)
 	foundAbba := false
 	inbrack := false
 	foundAbbaInbrack := false
 	for _, c := range ip {
 		if string(c) == "[" || string(c) == "]" {
 			inbrack = !inbrack
-			clear(stack)
+			stack.clear()
 			continue
 		}
-		if len(stack) == 4 {
-			// shift to left
-			stack[0] = stack[1]
-			stack[1] = stack[2]
-			stack[2] = stack[3]
-			stack[3] = c
-		} else {
-			stack = append(stack, c)
-		}
-		if len(stack) == 4 {
-			if stack[0] == stack[3] && stack[1] == stack[2] && stack[0] != stack[1] {
+		stack = stack.append(c)
+		if len(stack.buf) == stack.size {
+			if stack.buf[0] == stack.buf[3] && stack.buf[1] == stack.buf[2] && stack.buf[0] != stack.buf[1] {
 				if inbrack {
 					foundAbbaInbrack = true
 				} else {
@@ -82,30 +100,23 @@ func getbab(aba string) string {
 func supportsSSL(ip string) bool {
 	abas := make(map[string]bool)
 	babs := make(map[string]bool)
-	var stack []rune
+	var stack = NewBuffer(3)
 	inbrack := false
 	for _, c := range ip {
 		if string(c) == "[" || string(c) == "]" {
 			inbrack = !inbrack
-			clear(stack)
+			stack.clear()
 			continue
 		}
-		if len(stack) == 3 {
-			// shift to left
-			stack[0] = stack[1]
-			stack[1] = stack[2]
-			stack[2] = c
-		} else {
-			stack = append(stack, c)
-		}
-		if len(stack) == 3 {
-			if stack[0] == stack[2] && stack[0] != stack[1] {
+		stack = stack.append(c)
+		if len(stack.buf) == stack.size {
+			if stack.buf[0] == stack.buf[2] && stack.buf[0] != stack.buf[1] {
 				if inbrack {
 					// found bab
-					babs[string(stack[0])+string(stack[1])+string(stack[2])] = true
+					babs[string(stack.buf[0])+string(stack.buf[1])+string(stack.buf[2])] = true
 				} else {
 					// found aba
-					abas[string(stack[0])+string(stack[1])+string(stack[2])] = true
+					abas[string(stack.buf[0])+string(stack.buf[1])+string(stack.buf[2])] = true
 				}
 			}
 		}
