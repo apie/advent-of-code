@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from collections import deque
 
-p2 = True
+p2 = False #True
 
 def get_decompress_len(s: str) -> int:
 #    print(s)
@@ -20,20 +20,11 @@ def get_decompress_len(s: str) -> int:
             repr2 = int(instr.split('x')[1])
 #            print('>REPR1:', repr1)
 #            print('>REPR2:', repr2)
-            data = ''
             for _ in range(repr1):
-#                if q and q[0] == '(':
-#                    while q[0] != ')':
-#                        q.popleft()
-#                    q.popleft()
-                if q:
-                    data += q.popleft()
-            repr = len(data)
+                q.popleft()
             l += repr1 * repr2
-#            print('data', data)
-            continue
-#        print(c)
-        l += 1
+        else:
+            l += 1
 #    print(f'>L = {l}')
 #    print()
     return l
@@ -56,6 +47,7 @@ if not p2:
 
 
     answer = get_decompress_len(line.strip())
+    print('part 1', answer)
 
 # Part 2
 
@@ -84,7 +76,7 @@ def get_decompress_len_v2(s: str) -> int:
 #                    q.popleft()
                 if q:
                     data += q.popleft()
-            repr = len(data)
+#            repr = len(data)
 #            print('data', data)
             if '(' in data:
                 processed_data = ''
@@ -114,5 +106,4 @@ assert get_decompress_len_v2('(27x12)(20x12)(13x14)(7x10)(1x12)A') == 241920
 assert get_decompress_len_v2('(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN') == 445
 
 answer = get_decompress_len_v2(line.strip())
-print(answer)
-
+print('part 2', answer)
