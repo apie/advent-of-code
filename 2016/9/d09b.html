@@ -1,0 +1,98 @@
+<article class="day-desc">
+ <h2 id="part2">
+  --- Part Two ---
+ </h2>
+ <p>
+  Apparently, the file actually uses
+  <em>
+   version two
+  </em>
+  of the format.
+ </p>
+ <p>
+  In version two, the only difference is that markers within decompressed data
+  <em>
+   are
+  </em>
+  decompressed. This, the documentation explains, provides much more substantial compression capabilities, allowing many-gigabyte files to be stored in
+  <span title="&#34;It&#39;s the bomb!&#34;, the documentation claims.">
+   only a few kilobytes
+  </span>
+  .
+ </p>
+ <p>
+  For example:
+ </p>
+ <ul>
+  <li>
+   <code>
+    (3x3)XYZ
+   </code>
+   still becomes
+   <code>
+    XYZXYZXYZ
+   </code>
+   , as the decompressed section contains no markers.
+  </li>
+  <li>
+   <code>
+    X(8x2)(3x3)ABCY
+   </code>
+   becomes
+   <code>
+    XABCABCABCABCABCABCY
+   </code>
+   , because the decompressed data from the
+   <code>
+    (8x2)
+   </code>
+   marker is then further decompressed, thus triggering the
+   <code>
+    (3x3)
+   </code>
+   marker twice for a total of six
+   <code>
+    ABC
+   </code>
+   sequences.
+  </li>
+  <li>
+   <code>
+    (27x12)(20x12)(13x14)(7x10)(1x12)A
+   </code>
+   decompresses into a string of
+   <code>
+    A
+   </code>
+   repeated
+   <code>
+    241920
+   </code>
+   times.
+  </li>
+  <li>
+   <code>
+    (25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN
+   </code>
+   becomes
+   <code>
+    445
+   </code>
+   characters long.
+  </li>
+ </ul>
+ <p>
+  Unfortunately, the computer you brought probably doesn&#39;t have enough memory to actually decompress the file; you&#39;ll have to
+  <em>
+   come up with another way
+  </em>
+  to get its decompressed length.
+ </p>
+ <p>
+  What is the
+  <em>
+   decompressed length
+  </em>
+  of the file using this improved format?
+ </p>
+</article>
