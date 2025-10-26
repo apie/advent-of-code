@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 from collections import deque
 
-p2 = False #True
+p1 = True
+#False
 
 def get_decompress_len(s: str) -> int:
 #    print(s)
@@ -31,7 +32,7 @@ def get_decompress_len(s: str) -> int:
 
 with open('d09.input') as f:
     line = f.readline()
-if not p2:
+if p1:
     # ADVENT contains no markers and decompresses to itself with no changes, resulting in a decompressed length of 6.
     assert get_decompress_len('ADVENT') == 6
     # A(1x5)BC repeats only the B a total of 5 times, becoming ABBBBBC for a decompressed length of 7.
@@ -44,8 +45,7 @@ if not p2:
     assert get_decompress_len('(6x1)(1x3)A') == 6
     # X(8x2)(3x3)ABCY becomes X(3x3)ABC(3x3)ABCY (for a decompressed length of 18), because the decompressed data from the (8x2) marker (the (3x3)ABC) is skipped and not processed further.
     assert get_decompress_len('X(8x2)(3x3)ABCY') == 18
-
-
+    print('tests part1 passed!')
     answer = get_decompress_len(line.strip())
     print('part 1', answer)
 
@@ -70,27 +70,21 @@ def get_decompress_len_v2(s: str) -> int:
 #            print('>REPR2:', repr2)
             data = ''
             for _ in range(repr1):
-#                if q and q[0] == '(':
-#                    while q[0] != ')':
-#                        q.popleft()
-#                    q.popleft()
                 if q:
                     data += q.popleft()
-#            repr = len(data)
 #            print('data', data)
             if '(' in data:
-                processed_data = ''
-                for _ in range(repr2):
-                    processed_data += data
+                processed_data = data*repr2
+#                for _ in range(repr2):
+#                    processed_data += data
 #                print('Getting ld for',processed_data)
                 ld = get_decompress_len_v2(processed_data)
 #                print('ld', ld)
                 l += ld
             else:
                 l += repr1 * repr2
-            continue
-#        print(c)
-        l += 1
+        else:
+            l += 1
 #    print(f'>L = {l}')
 #    print()
     return l
@@ -104,6 +98,6 @@ assert get_decompress_len_v2('X(8x2)(3x3)ABCY') == 20
 assert get_decompress_len_v2('(27x12)(20x12)(13x14)(7x10)(1x12)A') == 241920
 # (25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN becomes 445 characters long.
 assert get_decompress_len_v2('(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN') == 445
-
+print('tests part2 passed!')
 answer = get_decompress_len_v2(line.strip())
 print('part 2', answer)
