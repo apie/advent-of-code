@@ -23,8 +23,7 @@ func splitLines(content []byte) []string {
 func get_decompress_len(inp string) int {
 	l := 0
 	q := strings.Split(inp, "")
-	i := 0
-	for i < len(q) {
+	for i:= 0; i < len(q); i++ {
 		c := q[i]
 		fmt.Println(c)
 		if c == "(" {
@@ -46,7 +45,6 @@ func get_decompress_len(inp string) int {
 		} else {
 			l += 1
 		}
-		i++
 	}
 	fmt.Println("")
 	return l
@@ -55,8 +53,7 @@ func get_decompress_len(inp string) int {
 func get_decompress_len_inc_nested(inp string) int {
 	l := 0
 	q := strings.Split(inp, "")
-	i := 0
-	for i < len(q) {
+	for i:= 0; i < len(q); i++ {
 		c := q[i]
 		// fmt.Println(c)
 		if c == "(" {
@@ -95,7 +92,6 @@ func get_decompress_len_inc_nested(inp string) int {
 		} else {
 			l += 1
 		}
-		i++
 	}
 	// fmt.Printf(">L: %d\n", l)
 	// fmt.Println("")
