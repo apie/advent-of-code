@@ -5,24 +5,29 @@ export const part1 = (lines: string[]): number => {
     console.log(
         "Part 1: the number of times the dial is left pointing at 0 after any rotation in the sequence.",
     );
-    let pos = 50;
-    return lines.map((line) => {
-        const direction = line[0];
-        const amount = parseInt(line.substring(1));
-        p("Instructions:", direction, amount);
-        switch (direction) {
-            case "L":
-                pos -= amount;
-                break;
-            case "R":
-                pos += amount;
-                break;
-            default:
-                throw Error("Unknown direction");
-        }
-        p("Pos:", pos);
-        return (pos % 100 === 0);
-    }).sum();
+    const { pos, timesEndedAtZero } = lines.reduce(
+        ({ pos, timesEndedAtZero }, line) => {
+            p("Pos:", pos);
+            const direction = line[0];
+            const amount = parseInt(line.substring(1));
+            p("Instructions:", direction, amount);
+            switch (direction) {
+                case "L":
+                    pos -= amount;
+                    break;
+                case "R":
+                    pos += amount;
+                    break;
+                default:
+                    throw Error("Unknown direction");
+            }
+            if (pos % 100 === 0) timesEndedAtZero++;
+            return { pos: pos, timesEndedAtZero: timesEndedAtZero };
+        },
+        { pos: 50, timesEndedAtZero: 0 },
+    );
+    p("pos", pos, "timesEndedAtZero", timesEndedAtZero);
+    return timesEndedAtZero;
 };
 export const part2 = (lines: string[]): number => {
     console.log(
