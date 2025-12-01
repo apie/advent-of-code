@@ -14,6 +14,15 @@ L99
 R14
 L82
 `.trim().split("\n");
-// Deno.test("part 1", () => {
-//   assertEquals(part1(testinput), 3);
-// });
+Deno.test("part 1", () => {
+  assertEquals(part1(testinput), 3);
+});
+Deno.test("part 2", () => {
+  assertEquals(part2(testinput), 6);
+});
+const testinput2 = `
+R1000
+`.trim().split("\n");
+Deno.test("part 2.2", () => {
+  assertEquals(part2(testinput2), 10);
+});

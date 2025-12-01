@@ -6,11 +6,10 @@ export const part1 = (lines: string[]): number => {
         "Part 1: the number of times the dial is left pointing at 0 after any rotation in the sequence.",
     );
     let pos = 50;
-    p("pos:", pos);
     return lines.map((line) => {
         const direction = line[0];
         const amount = parseInt(line.substring(1));
-        p(direction, amount);
+        p("Instructions:", direction, amount);
         switch (direction) {
             case "L":
                 pos -= amount;
@@ -21,15 +20,45 @@ export const part1 = (lines: string[]): number => {
             default:
                 throw Error("Unknown direction");
         }
-        while (pos < 0) pos += 100;
-        while (pos > 99) pos -= 100;
-        p("pos:", pos);
-        if (pos === 0) return 1;
-        return 0;
+        p("Pos:", pos);
+        return (pos % 100 === 0);
     }).sum();
 };
 export const part2 = (lines: string[]): number => {
-    return 0;
+    console.log(
+        "Part 2: the number of times the dial passes or lands on 0.",
+    );
+    const { pos, passedZero } = lines.reduce(({ pos, passedZero }, line) => {
+        p("Pos:", pos);
+        const direction = line[0];
+        const amount = parseInt(line.substring(1).trim());
+        p("Instructions:", direction, amount);
+        let dir;
+        switch (direction) {
+            case "L":
+                dir = -1;
+                break;
+            case "R":
+                dir = 1;
+                break;
+            default:
+                throw Error("Unknown direction");
+        }
+        for (
+            let remainingAmount = amount;
+            remainingAmount > 0;
+            remainingAmount--
+        ) {
+            pos += dir;
+            if (pos % 100 === 0) {
+                passedZero++;
+                p("---passed zero!");
+            }
+        }
+        return { pos: pos, passedZero: passedZero };
+    }, { pos: 50, passedZero: 0 });
+    p("pos", pos, "passedzero", passedZero);
+    return passedZero;
 };
 
 function* d01(input: string): Generator<number> {
