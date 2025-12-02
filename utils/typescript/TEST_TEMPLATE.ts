@@ -1,4 +1,4 @@
-import { assertEquals } from "jsr:@std/assert";
+import { assertEquals } from "jsr:@std/assert@1.0.11";
 
 import { part1, part2 } from "./d_DAY_.ts";
 
