@@ -28,7 +28,16 @@ Object.defineProperty(Array.prototype, "max", {
     value: function () {
         return this.reduce(
             (highest: number, item: number) => item > highest ? item : highest,
-            this.shift(),
+            this[0],
+        );
+    },
+});
+Object.defineProperty(Array.prototype, "min", {
+    enumerable: false,
+    value: function () {
+        return this.reduce(
+            (lowest: number, item: number) => item < lowest ? item : lowest,
+            this[0],
         );
     },
 });
@@ -62,6 +71,10 @@ declare global {
          * Returns the highest number in the array.
          */
         max(): number;
+        /**
+         * Returns the lowest number in the array.
+         */
+        min(): number;
         count(c: string | number | boolean): number;
     }
     interface Number {
@@ -129,6 +142,18 @@ export class Point {
     }
     getUniqueKey() {
         return `${this.x},${this.y}`;
+    }
+    getAdjacent(): Point[] {
+        return [
+            new Point(this.x - 1, this.y), //above
+            new Point(this.x - 1, this.y + 1), //right above
+            new Point(this.x, this.y + 1),
+            new Point(this.x + 1, this.y + 1),
+            new Point(this.x + 1, this.y),
+            new Point(this.x + 1, this.y - 1),
+            new Point(this.x, this.y - 1),
+            new Point(this.x - 1, this.y - 1),
+        ];
     }
 }
 
@@ -216,5 +241,25 @@ export class Grid {
             p(row);
         }
         p();
+    }
+    isFree(p: Point, freeChar: string = "."): boolean {
+        return this.g[p.x][p.y] === freeChar;
+    }
+    isBlocked(p: Point, blockChar: string = "@"): boolean {
+        return this.g[p.x][p.y] === blockChar;
+    }
+    walkGrid(
+        callback: (x: number, y: number) => void,
+    ) {
+        const [xlen, ylen] = this.size();
+        for (let x = 0; x < xlen; x++) {
+            for (let y = 0; y < ylen; y++) {
+                callback(x, y);
+            }
+        }
+    }
+    onGrid(p: Point): boolean {
+        const [xlen, ylen] = this.size();
+        return p.x.between(0, xlen-1) && p.y.between(0, ylen-1);
     }
 }
