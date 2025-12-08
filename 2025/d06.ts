@@ -2,24 +2,26 @@ import { assert } from "jsr:@std/assert@1.0.11/assert";
 import "./util.ts";
 import { Grid, p } from "./util.ts";
 
-const getColTot = (parsed: string[][], col: number): number => {
-    let coltot = 0;
-    const sub: number[] = [];
-    for (let row = 0; row < parsed.length - 1; row++) {
-        // p(parsed[row][col]);
-        sub.push(Number(parsed[row][col]));
-    }
-    switch (parsed[parsed.length - 1][col]) {
+const getColSubTot = (colArr: string[]): number => {
+    p("~~~~~~~~~get subtot:");
+    //calculate subtot of latest col
+    const op = colArr.shift();
+    switch (op) {
         case "*":
-            coltot = sub.prod();
-            break;
+            return colArr.prod(); //items converted to number automatically
         case "+":
-            coltot = sub.sum();
-            break;
+            return colArr.sum(); //items converted to number automatically
         default:
-            throw Error("unknown operation");
+            throw Error("unknown operation " + op);
     }
-    return coltot;
+};
+const getColTot = (parsed: string[][], col: number): number => {
+    const sub: string[] = [];
+    sub.push(parsed[parsed.length - 1][col]); //operation is first item
+    for (let row = 0; row < parsed.length - 1; row++) {
+        sub.push(parsed[row][col]);
+    }
+    return getColSubTot(sub);
 };
 export const part1 = (lines: string[]): number => {
     console.log(
@@ -44,19 +46,6 @@ export const part1 = (lines: string[]): number => {
     }
 
     return grandTot;
-};
-const getColSubTot = (colArr: string[]): number => {
-    p("~~~~~~~~~get subtot:");
-    //calculate subtot of latest col
-    const op = colArr.shift();
-    switch (op) {
-        case "*":
-            return colArr.prod();
-        case "+":
-            return colArr.sum();
-        default:
-            throw Error("unknown operation " + op);
-    }
 };
 export const part2 = (lines: string[]): number => {
     console.log(
