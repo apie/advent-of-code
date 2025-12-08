@@ -258,8 +258,18 @@ export class Grid {
             }
         }
     }
+    walkGridRowFirst(
+        callback: (x: number, y: number, val: string) => void,
+    ) {
+        const [xlen, ylen] = this.size();
+        for (let y = 0; y < ylen; y++) {
+            for (let x = 0; x < xlen; x++) {
+                callback(x, y, this.g[x][y]);
+            }
+        }
+    }
     onGrid(p: Point): boolean {
         const [xlen, ylen] = this.size();
-        return p.x.between(0, xlen-1) && p.y.between(0, ylen-1);
+        return p.x.between(0, xlen - 1) && p.y.between(0, ylen - 1);
     }
 }

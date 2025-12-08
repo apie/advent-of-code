@@ -1,5 +1,6 @@
+import { assert } from "jsr:@std/assert@1.0.11/assert";
 import "./util.ts";
-import { p } from "./util.ts";
+import { Grid, p } from "./util.ts";
 
 const getColTot = (parsed: string[][], col: number): number => {
     let coltot = 0;
@@ -37,16 +38,65 @@ export const part1 = (lines: string[]): number => {
     let grandTot = 0;
     for (let col = 0; col < parsed[0].length; col++) {
         p(col);
-        let colTot = getColTot(parsed, col);
+        const colTot = getColTot(parsed, col);
         p("coltot of colum", col, "=", colTot);
         grandTot += colTot;
     }
 
     return grandTot;
 };
+const getColSubTot = (colArr: string[]): number => {
+    p("~~~~~~~~~get subtot:");
+    //calculate subtot of latest col
+    const op = colArr.shift();
+    switch (op) {
+        case "*":
+            return colArr.prod();
+        case "+":
+            return colArr.sum();
+        default:
+            throw Error("unknown operation " + op);
+    }
+};
 export const part2 = (lines: string[]): number => {
-    console.log("Part 2: x");
-    return 0;
+    console.log(
+        "Part 2: What is the grand total found by adding together all of the answers to the individual problems?",
+    );
+    const g = new Grid(lines);
+    g._dbg_printv();
+    let vals = "";
+    let colArr: string[] = [];
+    let tot = 0;
+    g.walkGridRowFirst((x, _y, val: string) => {
+        val = val?.trim();
+        // p(x,_y,val);
+        if (val?.match(/\d/)) { // digits can be concatenated to val
+            vals += val;
+        } else if (val) { // operation can be added to the array
+            colArr.push(val);
+        }
+
+        if (x === lines.length - 1) {
+            // p('last row')
+            if (vals === "") {
+                const subtot = getColSubTot(colArr);
+                p("subtot:", subtot);
+                tot += subtot;
+                colArr = [];
+            } else {
+                p("vals:", vals);
+                colArr.push(vals);
+                vals = ""; //reset after reaching last row
+            }
+        }
+    });
+    // Rightmost col:
+    const subtot = getColSubTot(colArr);
+    p("subtot:", subtot);
+    tot += subtot;
+    colArr = [];
+    assert(colArr.length === 0, "colArr not empty");
+    return tot;
 };
 
 function* d06(input: string): Generator<number> {
