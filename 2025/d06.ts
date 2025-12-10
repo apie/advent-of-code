@@ -56,7 +56,7 @@ export const part2 = (lines: string[]): number => {
     let vals = "";
     let colArr: string[] = [];
     let tot = 0;
-    g.walkGridRowFirst((x, _y, val: string) => {
+    g.walkGridRowFirst((pt, val) => {
         val = val?.trim();
         // p(x,_y,val);
         if (val?.match(/\d/)) { // digits can be concatenated to val
@@ -65,7 +65,7 @@ export const part2 = (lines: string[]): number => {
             colArr.push(val);
         }
 
-        if (x === lines.length - 1) {
+        if (pt.x === lines.length - 1) {
             // p('last row')
             if (vals === "") {
                 const subtot = getColSubTot(colArr);

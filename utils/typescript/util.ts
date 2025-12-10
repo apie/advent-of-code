@@ -160,6 +160,9 @@ export class Point {
 export const sortPoints = (pointArray: Point[]): Point[] =>
     pointArray.sort((a, b) => (a.y * 10_000 + a.x) - (b.y * 10_000 + b.x));
 
+/**
+ * Grid class that uses a string array as constructor, and also uses this format internally.
+ */
 export class Grid {
     g: string[];
     constructor(g: string[]) {
@@ -248,28 +251,37 @@ export class Grid {
     isBlocked(p: Point, blockChar: string = "@"): boolean {
         return this.g[p.x][p.y] === blockChar;
     }
+    /**
+     * Walks grid, column first
+     */
     walkGrid(
-        callback: (x: number, y: number) => void,
+        callback: (p: Point, val: string) => void,
     ) {
         const [xlen, ylen] = this.size();
         for (let x = 0; x < xlen; x++) {
             for (let y = 0; y < ylen; y++) {
-                callback(x, y);
+                callback(new Point(x, y), this.g[x][y]);
             }
         }
     }
+    /**
+     * Walks grid, row first
+     */
     walkGridRowFirst(
-        callback: (x: number, y: number, val: string) => void,
+        callback: (p: Point, val: string) => void,
     ) {
         const [xlen, ylen] = this.size();
         for (let y = 0; y < ylen; y++) {
             for (let x = 0; x < xlen; x++) {
-                callback(x, y, this.g[x][y]);
+                callback(new Point(x, y), this.g[x][y]);
             }
         }
     }
     onGrid(p: Point): boolean {
         const [xlen, ylen] = this.size();
         return p.x.between(0, xlen - 1) && p.y.between(0, ylen - 1);
+    }
+    replaceCharAt(position: Point, char: string): void {
+        this.g[position.x] = this.g[position.x].replaceCharAt(position.y, char);
     }
 }
