@@ -45,7 +45,7 @@ export const part2 = (lines: string[]): number => {
     let colArr: string[] = [];
     let tot = 0;
     let op = "";
-    g.walkGridRowFirst((pt, val) => {
+    g.walkGridRowFirst().forEach(([pt, val]) => {
         val = val?.trim();
         if (val?.match(/\d/)) { // digits can be concatenated to val
             vals += val;

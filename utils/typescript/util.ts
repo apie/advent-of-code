@@ -265,13 +265,11 @@ export class Grid {
     /**
      * Walks grid, row first
      */
-    walkGridRowFirst(
-        callback: (p: Point, val: string) => void,
-    ) {
+    *walkGridRowFirst(): Generator<[Point, string]> {
         const [xlen, ylen] = this.size();
         for (let y = 0; y < ylen; y++) {
             for (let x = 0; x < xlen; x++) {
-                callback(new Point(x, y), this.g[x][y]);
+                yield [new Point(x, y), this.g[x][y]];
             }
         }
     }
