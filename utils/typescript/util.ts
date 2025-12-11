@@ -1,5 +1,5 @@
-import { assert } from "jsr:@std/assert/assert";
-import memoize from "jsr:@korkje/memz";
+import { assert } from "jsr:@std/assert@1.0.11";
+import memoize from "jsr:@korkje/memz@0.2.1";
 
 export const isRunningInTest = memoize((): boolean => {
     const stack = new Error().stack;
