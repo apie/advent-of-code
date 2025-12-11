@@ -252,15 +252,13 @@ export class Grid {
         return this.g[p.x][p.y] === blockChar;
     }
     /**
-     * Walks grid, column first
+     * Walks grid, column first.
      */
-    walkGrid(
-        callback: (p: Point, val: string) => void,
-    ) {
+    *walkGrid(): Generator<[Point, string]> {
         const [xlen, ylen] = this.size();
         for (let x = 0; x < xlen; x++) {
             for (let y = 0; y < ylen; y++) {
-                callback(new Point(x, y), this.g[x][y]);
+                yield [new Point(x, y), this.g[x][y]];
             }
         }
     }

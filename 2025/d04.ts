@@ -1,19 +1,20 @@
 import "./util.ts";
 import { Grid, p, Point } from "./util.ts";
 
-const getAccessibleRolls = (g: Grid): Point[] => {
-    const accessibleRolls: Point[] = [];
-    g.walkGrid((p) => {
-        // Only check the places where a roll of paper lies
-        if (g.isFree(p)) return;
-        // Get number of adjacent, on grid, blocked rolls
-        const numBlockedAj = p.getAdjacent().filter((aj) => g.onGrid(aj)).map((
-            aj,
-        ) => g.isBlocked(aj)).count(true);
-        if (numBlockedAj < 4) accessibleRolls.push(p);
-    });
-    return accessibleRolls;
-};
+const getAccessibleRolls = (g: Grid): Point[] =>
+    Array.from(g.walkGrid())
+        .filter(([pt, _val]) =>
+            // Only check the places where a roll of paper lies
+            !g.isFree(pt)
+        )
+        .filter(([pt, _val]) =>
+            // Filter number of adjacent, on grid, blocked rolls, that is less than 4
+            pt.getAdjacent().filter((aj) => g.onGrid(aj))
+                .map((
+                    aj,
+                ) => g.isBlocked(aj)).count(true) < 4
+        ).map(([pt, _val]) => pt);
+
 export const part1 = (lines: string[]): number => {
     console.log(
         "Part 1: How many rolls of paper can be accessed by a forklift?",
